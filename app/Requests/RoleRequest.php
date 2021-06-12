@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Requests;
 
-use Hyperf\Validation\Request\FormRequest;
-use Hyperf\Validation\Rule;
-
 class RoleRequest extends AbstractRequest
 {
     protected function _addRule()
@@ -24,7 +21,7 @@ class RoleRequest extends AbstractRequest
                 //'bail', 
                 //'required', 
                 'unique:auth_role,code'
-                //Rule::unique('auth_role')->ignore($this->routeParam('id', 0)),
+                //$this->getRule()->unique('auth_role')->ignore($this->routeParam('id', 0)),
             ],*/
             'name' => [],
             'description' => [],

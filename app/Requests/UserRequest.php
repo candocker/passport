@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Requests;
 
-use Hyperf\Validation\Request\FormRequest;
-use Hyperf\Validation\Rule;
-
 class UserRequest extends AbstractRequest
 {
 
@@ -17,12 +14,12 @@ class UserRequest extends AbstractRequest
                 'bail',
                 'required',
                 'alpha_dash',
-                Rule::unique('user')->ignore($this->routeParam('id', 0), 'user_id'),
+                $this->getRule()->unique('user')->ignore($this->routeParam('id', 0), 'user_id'),
             ],
             'phone' => [
                 'bail',
                 'required',
-                Rule::unique('user')->ignore($this->routeParam('id', 0), 'user_id'),
+                $this->getRule()->unique('user')->ignore($this->routeParam('id', 0), 'user_id'),
             ],
             'real_name' => 'required',
             'password' => 'sometimes|same:confirm_password',
