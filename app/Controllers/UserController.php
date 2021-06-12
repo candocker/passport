@@ -15,7 +15,7 @@ class UserController extends AbstractController
 	public function myinfo()
 	{
         try {
-		    $result = $this->getJwt->getParserData();
+		    $result = $this->getJwt()->getParserData();
 			$userId = isset($result['user_id']) ? $result['user_id'] : 0;
 			if (empty($userId)) {
 				return $this->helper->error(401, '当前登录用户信息有误');

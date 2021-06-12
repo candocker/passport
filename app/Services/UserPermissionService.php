@@ -5,26 +5,14 @@ namespace ModulePassport\Services;
 
 use Illuminate\Hashing\BcryptHasher;
 use Carbon\Carbon;
-use Hyperf\Di\Annotation\Inject;
 
 class UserPermissionService extends AbstractService
 {
-    /** 
-     * @Inject                
-     * @var BcryptHasher
-     */
-    protected $hash;
 
-    protected $noRepository = true;
-
-    /**
-     */
-    /*public function __construct()
+    protected function pointRepository()
     {
-        parent::__construct();
-        //$this->hash = new BcryptHasher();
-        //$this->repository = $this->resource->getObject('repository', 'user-passport');
-    }*/
+        return false;
+    }
 
     public function checkInput($inputs, $params)
     {
