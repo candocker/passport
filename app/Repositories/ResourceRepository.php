@@ -5,6 +5,13 @@ namespace ModulePassport\Repositories;
 
 class ResourceRepository extends AbstractRepository
 {
+    public function cacheResourceDatas()
+    {
+        $datas = $this->_getDatas();
+        $this->resource->setBaseCache('resource', $datas);
+        return $datas;
+    }
+
     public function getFormFields()
     {
         $return = [

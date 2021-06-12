@@ -4,10 +4,14 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Models;
 
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use ModulePassport\Models\Traits\TraitUser;
 
-class User extends AbstractModel
+class User extends AbstractModel implements JWTSubject, AuthenticatableContract
 {
+    use Authenticatable;
     use TraitUser;
 
     protected $table = 'user';
@@ -44,5 +48,25 @@ class User extends AbstractModel
     public function checkEnable()
     {
         return $this->status == 1;
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }
