@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Requests;
 
-use Hyperf\Validation\Rule;
-
 class AttachmentRequest extends AbstractRequest
 {
     protected function _addRule()
@@ -43,7 +41,7 @@ class AttachmentRequest extends AbstractRequest
             'path_id' => [
                 'bail',
                 'required',
-                Rule::exists('attachment_path', 'id')->where(function ($query) {
+                $this->getRule()->exists('attachment_path', 'id')->where(function ($query) {
                     $query->where('system', 'like', 'local%');
                 }),
             ],

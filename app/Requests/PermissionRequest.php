@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Requests;
 
-use Hyperf\Validation\Request\FormRequest;
-use Hyperf\Validation\Rule;
-
 class PermissionRequest extends AbstractRequest
 {
 
@@ -16,7 +13,7 @@ class PermissionRequest extends AbstractRequest
             'code' => [
                 'bail',
                 'required',
-                Rule::unique('auth_permission')->ignore($this->routeParam('id', 0)),
+                $this->getRule()->unique('auth_permission')->ignore($this->routeParam('id', 0)),
             ],
             'resource_code' => ['bail', 'filled', 'exists:auth_resource,code'],
             'parent_code' => ['bail', 'filled', 'exists:auth_permission,code'],
