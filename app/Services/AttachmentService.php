@@ -3,10 +3,18 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Services;
 
+use Hyperf\Filesystem\FilesystemFactory;
+use Hyperf\Di\Annotation\Inject;
 use Framework\Baseapp\Tools\CommonTool;
 
 class AttachmentService extends AbstractService
 {
+    /** 
+     * @Inject                
+     * @var FilesystemFactory
+     */
+    protected $factory;
+
     public function createPaths($system, $path)
     {
         $driver = $this->getFileDriver($system);
@@ -140,8 +148,8 @@ class AttachmentService extends AbstractService
         return $data;
     }
 
-    protected function getFileDriver()
+    protected function getFileDriver($system)
     {
-        return null;
+        return $this->factory->get($system);
     }
 }

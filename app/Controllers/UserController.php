@@ -5,9 +5,22 @@ declare(strict_types = 1);
 namespace ModulePassport\Controllers;
 
 use Illuminate\Hashing\BcryptHasher;
+use Hyperf\Di\Annotation\Inject;
+use Phper666\JWTAuth\JWT;
 
 class UserController extends AbstractController
 {
+    /**
+     * @Inject
+     * @var JWT
+     */
+    protected $jwt;
+
+    /**
+     * @Inject
+     * @var BcryptHasher
+     */
+    protected $hash;
 
 	/**
 	 * 获取当前登录用户信息
@@ -38,7 +51,7 @@ class UserController extends AbstractController
 
     protected function getJwt()
     {
-        return null;
+        return $this->jwt;
     }
 
     //get

@@ -3,8 +3,19 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Repositories;
 
+use Hyperf\Cache\Annotation\CachePut;
+
 class ResourceRepository extends AbstractRepository
 {
+    /**
+     * @CachePut(prefix="common-resource")
+     */
+    public function cacheResourceDatas($key = 'resources')
+    {
+        $datas = $this->_getDatas();
+        return $datas;
+    }
+
     public function getFormFields()
     {
         $return = [

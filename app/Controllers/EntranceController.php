@@ -4,10 +4,24 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Controllers;
 
+use Phper666\JWTAuth\JWT;
+use Hyperf\Di\Annotation\Inject;
 use Framework\Baseapp\Services\EasysmsService;
 
 class EntranceController extends AbstractController
 {
+    /**
+     * @Inject
+     * @var JWT
+     */
+    protected $jwt;
+
+    /**
+     * @Inject
+     * @var EasysmsService
+     */
+    protected $easysmsService;
+
     public function signup()
     {
         $request = $this->getRequestObj('signup');
@@ -62,5 +76,38 @@ class EntranceController extends AbstractController
         $request = $this->request;
         $rolePermissions = $request->getAttribute('rolePermissions');
         return $this->success($rolePermissions);
+    }
+
+	/**
+ 	 * 刷新token
+	 */
+    public function refreshToken()
+    {
+        $token = $this->jwt->refreshToken();
+        return ['access_token' => (string) $token, 'expires_in' => $this->jwt->getTTL()];
+    }
+
+	/**
+ 	 * 退出登录
+	 */
+    public function logout()
+    {
+        try {
+            $this->jwt->logout();
+        } catch (\Exception $e) {
+            return $this->helper->error(410, 'Token有误');
+        }
+        return $this->helper->success('success');
+    }
+
+    protected function _getToken($user)
+    {
+        $token = (string) $this->jwt->getToken(['user_id' => $user->id]);
+        return $token;
+    }
+
+    protected function _getTTL()
+    {
+        return $this->jwt->getTTL();
     }
 }

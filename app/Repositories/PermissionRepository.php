@@ -3,8 +3,20 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Repositories;
 
+use Hyperf\Cache\Annotation\CachePut;
+
 class PermissionRepository extends AbstractRepository
 {
+
+    /**
+     * @CachePut(prefix="common-route")
+     */
+    public function cacheRouteDatas($key = 'routes')
+    {
+        $datas = $this->_getDatas();
+        return $datas;
+    }
+
     protected function _getRoutePath($data, $action)
     {
         if (!empty($data['route'])) {
