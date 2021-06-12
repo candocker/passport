@@ -1,0 +1,41 @@
+{
+    "name": "canmodule/passport",
+    "type": "project",
+    "keywords": [
+        "php",
+        "application",
+        "passport",
+        "user",
+        "permission",
+        "role",
+        "resource"
+    ],
+    "description": "A application of passport",
+    "license": "MIT",
+    "require": {
+        "php": "^7.3.0"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "ModulePassport\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ModulePassport\\Test\\": "./test/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": [],
+    "scripts": {
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    }
+}
