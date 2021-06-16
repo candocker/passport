@@ -8,6 +8,13 @@ use Carbon\Carbon;
 
 class UserPermissionService extends AbstractService
 {
+    protected $hash;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->hash = new BcryptHasher();
+    }
 
     protected function pointRepository()
     {

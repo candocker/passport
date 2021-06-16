@@ -10,6 +10,11 @@ use ModulePassport\Requests\ValidateCaptchaRequest;
 
 class CommonController extends AbstractController
 {
+    public function captcha()
+    {
+        return captcha();
+    }
+
     public function validateCaptcha(ValidateCaptchaRequest $request)
     {
         return ['code' => 200, 'message' => 'OK'];
