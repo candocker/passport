@@ -6,31 +6,24 @@ namespace ModulePassport\Controllers;
 
 use ModulePassport\Requests\SendCodeRequest;
 use ModulePassport\Requests\ValidateCodeRequest;
+use ModulePassport\Requests\ValidateCaptchaRequest;
 
 class CommonController extends AbstractController
 {
-
-	public function actionCheckCaptcha()
-	{
-		return $this->checkCommon('captcha');
-	}
-
-	public function sendCode(SendCodeRequest $request)
-	{
-        $data = $request->all();
-		return $this->getServiceObj('easysms')->sendCode($data);
-		return $this->easysmsService->sendCode($data);
-	}
-
-	public function validateCode(ValidateCodeRequest $request)
-	{
-        $data = $request->all();
-		return $this->easysmsService->validateCode($data);
-	}
-
-    protected function checkCommon($field)
+    public function validateCaptcha(ValidateCaptchaRequest $request)
     {
-		$data = $this->_formatInput([$field]);
-		return $this->getModel()->checkCommon($field, $data[$field]);
+        return ['code' => 200, 'message' => 'OK'];
+    }
+
+    public function sendCode(SendCodeRequest $request)
+    {
+        $data = $request->all();
+        return $this->getServiceObj('easysms')->sendCode($data);
+    }
+
+    public function validateCode(ValidateCodeRequest $request)
+    {
+        $data = $request->all();
+        return $this->getServiceObj('easysms')->validateCode($data);
     }
 }
