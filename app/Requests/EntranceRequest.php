@@ -14,6 +14,12 @@ class EntranceRequest extends AbstractRequest
     {
         $scene = $this->getScene();
         switch ($scene) {
+        case 'signin':
+            return [
+                'mobile' => 'required|mobile|exists:user,mobile',
+                'code' => ['bail', 'required'],
+                'type' => ['bail', 'required'],
+            ];
         case 'signupin':
             return [
                 'mobile' => 'required|mobile',

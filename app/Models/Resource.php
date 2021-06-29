@@ -14,7 +14,7 @@ class Resource extends AbstractModel
 
     public function canDelete()
     {
-        $exist = $this->getPointModel('permission')->where('resource_code', $this->code)->first();
+        $exist = $this->getModelObj('permission')->where('resource_code', $this->code)->first();
         if ($exist) {
             return false;
         }

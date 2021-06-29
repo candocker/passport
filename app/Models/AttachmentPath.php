@@ -30,7 +30,7 @@ class AttachmentPath extends AbstractModel
             return ;
         }
 
-        $service = $this->resource->getObject('service', 'attachment');
+        $service = $this->getServiceObj('attachment');
         $r = $service->mkdirLocal($this->system, $this->path_full);
         return true;
     }

@@ -14,7 +14,7 @@ class AttachmentInfoController extends AbstractController
         $data = $request->getInputDatas('add');
         $attachmentIds = (array) $data['attachment_id'];
         unset($data['attachment_id']);
-        $attachmentModel = $this->resource->getObject('model', 'attachment');
+        $attachmentModel = $this->getModelObj('attachment');
         $message = '';
         foreach ($attachmentIds as $attachmentId) {
             if (empty($attachmentModel->find($attachmentId))) {
