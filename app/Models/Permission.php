@@ -11,7 +11,7 @@ class Permission extends AbstractModel
 
     protected $table = 'auth_permission';
 
-    public function _afterDeleted()
+    public function dealDeleting()
     {
         $this->getModelObj('rolePermission')->where('permission_code', $this->code)->delete();
 
