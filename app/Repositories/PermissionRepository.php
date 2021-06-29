@@ -140,6 +140,8 @@ class PermissionRepository extends AbstractRepository
 
     protected function _formatPath($path)
     {
+        $path = str_replace('}]', '?}', $path);
+        $path = str_replace([':\d+', '[', ']'], ['', '', ''], $path);
         return $path;
     }
 }

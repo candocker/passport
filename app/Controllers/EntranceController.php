@@ -69,4 +69,50 @@ class EntranceController extends AbstractController
         $rolePermissions = $request->get('rolePermissions');
         return $this->success($rolePermissions);
     }
+
+    /**
+     * @group auth登录模块
+     *
+     * logout退出登录
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @response {
+     *   "code": 200,
+     *   "message": "您已成功退出登录"
+     * }
+     */
+    public function logout()
+    {
+        auth('api')->logout();
+        return responseJsonHttp(200, '您已成功退出登录');
+    }
+
+    /**
+     * Refresh a token.
+     * 刷新token，如果开启黑名单，以前的token便会失效。
+     * 值得注意的是用上面的getToken再获取一次Token并不算做刷新，两次获得的Token是并行的，即两个都可用。
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return $this->success([
+            'access_token' => $this->_getToken('refresh'),
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
+    }
+
+    protected function _getToken($type, $user = null)
+    {
+        if ($type == 'refresh') {
+            return auth('api')->refresh();
+        }
+        $token = auth('api')->login($user);
+        return $token;
+    }
+
+    protected function _getTTL()
+    {
+        return auth('api')->factory()->getTTL() * 60;
+    }
 }

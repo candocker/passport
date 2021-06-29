@@ -142,6 +142,6 @@ class AttachmentService extends AbstractService
 
     protected function getFileDriver($system)
     {
-        return null;
+        return Storage::disk($system);
     }
 }
