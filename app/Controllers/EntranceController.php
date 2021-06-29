@@ -16,21 +16,21 @@ class EntranceController extends AbstractController
 
     public function signup()
     {
-        $request = $this->getRequestObj('signup');
+        $request = $this->getPointRequest('signup');
         $checkCode = $this->easysmsService->validateCode($request->all());
         return $this->_token($request, ['type' => 'mobile', 'addUser' => true]);
     }
 
     public function signupin()
     {
-        $request = $this->getRequestObj('signupin');
+        $request = $this->getPointRequest('signupin');
         $checkCode = $this->easysmsService->validateCode($request->all());
         return $this->_token($request, ['type' => 'mobile', 'addUser' => true]);
     }
 
     public function signin()
     {
-        $request = $this->getRequestObj('signupin');
+        $request = $this->getPointRequest('signin');
         $checkCode = $this->easysmsService->validateCode($request->all());
         return $this->_token($request, ['type' => 'mobile']);
     }
@@ -58,7 +58,7 @@ class EntranceController extends AbstractController
 
         $repository = $this->getRepositoryObj('user');
         $datas['user'] = $repository->getUserData($user);
-        $datas['access_token'] = $this->_getToken($user);
+        $datas['access_token'] = $this->_getToken('login', $user);
         $datas['expires_in'] = $this->_getTTL();
         return $this->success($datas);
     }
@@ -66,64 +66,7 @@ class EntranceController extends AbstractController
     public function myRoutes()
     {
         $request = $this->request;
-        $rolePermissions = $request->getAttribute('rolePermissions');
+        $rolePermissions = $request->get('rolePermissions');
         return $this->success($rolePermissions);
-    }
-
-    /**
-     * @group auth登录模块
-     *
-     * logout退出登录
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * @response {
-     *   "code": 200,
-     *   "message": "您已成功退出登录"
-     * }
-     */
-
-    public function logout()
-    {
-        auth('api')->logout();
-
-        return responseJsonHttp(200, '您已成功退出登录');
-    }
-
-    /**
-     * Refresh a token.
-     * 刷新token，如果开启黑名单，以前的token便会失效。
-     * 值得注意的是用上面的getToken再获取一次Token并不算做刷新，两次获得的Token是并行的，即两个都可用。
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
-    {
-        return $this->respondWithToken(auth('api')->refresh());
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
-        ]);
-    }
-
-    protected function _getToken($user)
-    {
-        $token = auth('api')->login($user);
-        return $token;
-    }
-
-    protected function _getTTL()
-    {
-        return auth('api')->factory()->getTTL() * 60;
     }
 }

@@ -140,7 +140,7 @@ class AttachmentService extends AbstractService
         return $data;
     }
 
-    protected function getFileDriver()
+    protected function getFileDriver($system)
     {
         return null;
     }
