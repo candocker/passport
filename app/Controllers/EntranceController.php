@@ -10,21 +10,21 @@ class EntranceController extends AbstractController
 {
     public function signup()
     {
-        $request = $this->getRequestObj('signup');
+        $request = $this->getPointRequest('signup');
         $checkCode = $this->easysmsService->validateCode($request->all());
         return $this->_token($request, ['type' => 'mobile', 'addUser' => true]);
     }
 
     public function signupin()
     {
-        $request = $this->getRequestObj('signupin');
+        $request = $this->getPointRequest('signupin');
         $checkCode = $this->easysmsService->validateCode($request->all());
         return $this->_token($request, ['type' => 'mobile', 'addUser' => true]);
     }
 
     public function signin()
     {
-        $request = $this->getRequestObj('signupin');
+        $request = $this->getPointRequest('signin');
         $checkCode = $this->easysmsService->validateCode($request->all());
         return $this->_token($request, ['type' => 'mobile']);
     }
@@ -52,7 +52,7 @@ class EntranceController extends AbstractController
 
         $repository = $this->getRepositoryObj('user');
         $datas['user'] = $repository->getUserData($user);
-        $datas['access_token'] = $this->_getToken($user);
+        $datas['access_token'] = $this->_getToken('login', $user);
         $datas['expires_in'] = $this->_getTTL();
         return $this->success($datas);
     }
@@ -60,7 +60,7 @@ class EntranceController extends AbstractController
     public function myRoutes()
     {
         $request = $this->request;
-        $rolePermissions = $request->getAttribute('rolePermissions');
+        $rolePermissions = $request->get('rolePermissions');
         return $this->success($rolePermissions);
     }
 }
