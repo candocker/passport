@@ -40,9 +40,4 @@ class AttachmentPathController extends AbstractController
         $info['parentChains'] = $parentChains;
         return $this->success($info);
     }
-
-    protected function getFileDriver($type = null)
-    {
-        return null;
-    }
 }
