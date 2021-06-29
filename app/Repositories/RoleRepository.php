@@ -51,7 +51,7 @@ class RoleRepository extends AbstractRepository
 
         $noPermissions = [];
         foreach ($olds as $old) {
-            echo get_class($old) . '=====' . $old->permission_code;
+            //echo get_class($old) . '=====' . $old->permission_code;
             if (!in_array($old->permission_code, $permissions)) {
                 $noPermissions[] = $old->permission_code;
             }
