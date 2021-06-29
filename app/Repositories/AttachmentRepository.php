@@ -12,6 +12,7 @@ class AttachmentRepository extends AbstractRepository
             'pop' => ['id', 'path_id', 'name', 'tag', 'filepath', 'extension', 'created_at'],
             'popSearch' => ['id', 'path_id', 'name', 'extension', 'created_at'],
             'list' => ['id', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension', 'created_at'],
+            'view' => ['id', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension', 'created_at'],
             'listSearch' => ['id', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension', 'created_at'],
             'add' => ['system', 'path_id', 'files'],
             'create' => ['system', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension'],
@@ -76,7 +77,7 @@ class AttachmentRepository extends AbstractRepository
 
     protected function _systemKeyDatas()
     {
-        return $this->resource->getObject('repository', 'attachmentPath')->_systemKeyDatas();
+        return $this->getRepositoryObj('attachmentPath')->_systemKeyDatas();
     }
 
     public function getHaveSelection($scene)

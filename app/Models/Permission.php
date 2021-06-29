@@ -13,9 +13,9 @@ class Permission extends AbstractModel
 
     public function _afterDeleted()
     {
-        $this->getPointModel('rolePermission')->where('permission_code', $this->code)->delete();
+        $this->getModelObj('rolePermission')->where('permission_code', $this->code)->delete();
 
-        $this->resource->getObject('repository', 'permission')->cacheRouteDatas();
+        $this->getRepositoryObj('permission')->cacheRouteDatas();
         return $this;
     }
 }

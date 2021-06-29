@@ -25,7 +25,7 @@ class RoleRepository extends AbstractRepository
 
     public function permissionData($model, $field)
     {
-        $permission = $this->resource->getObject('repository', 'permission');
+        $permission = $this->getRepositoryObj('permission');
         $trees = $permission->getTreeInfos();
         $datas = $model->permissions->keyBy('permission_code');
         $checked = $datas->keys();

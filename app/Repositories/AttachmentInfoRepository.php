@@ -40,7 +40,7 @@ class AttachmentInfoRepository extends AbstractRepository
 
     protected function _appKeyDatas()
     {
-        return $this->resource->getObject('repository', 'attachmentPath')->_systemKeyDatas();
+        return $this->getRepositoryObj('attachmentPath')->_systemKeyDatas();
     }
 
     public function getHaveSelection($scene)

@@ -16,7 +16,7 @@ class BaseapiService extends AbstractService
 
 	public function getRegionInfo($pCode, $keyValue = false)
 	{
-		$infos = $this->getPointModel('region')->subInfos($pCode, false);
+		$infos = $this->getModelObj('region')->subInfos($pCode, false);
 		$infos = $keyValue ? ArrayHelper::map($infos, 'code', 'name') : $infos;
 		return ['status' => 200, 'message' => 'OK', 'data' => $infos];
 	}
