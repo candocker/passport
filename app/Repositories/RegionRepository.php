@@ -15,6 +15,15 @@ class RegionRepository extends AbstractRepository
         ];
     }
 
+	protected function _levelKeyDatas()
+	{
+		return [
+			'province' => '省级',
+			'city' => '市级',
+			'county' => '区县',
+		];
+	}
+
     protected function _sceneFields()
     {
         return [
