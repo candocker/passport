@@ -6,10 +6,10 @@ namespace ModulePassport\Controllers;
 
 class AttachmentController extends AbstractController
 {
-    public function add()
+    public function addGeneral()
     {
         $repository = $this->getRepositoryObj();
-        $request = $this->getRequestObj('create', $repository);
+        $request = $this->getPointRequest('create', $repository);
         $scene = $request->input('point_scene');
         if ($scene == 'get_formelem') {
             return $this->success(['formFields' => $repository->getFormatFormFields('add'), 'fieldNames' => $repository->getAttributeNames('add')]);

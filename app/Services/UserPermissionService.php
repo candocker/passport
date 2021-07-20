@@ -52,7 +52,7 @@ class UserPermissionService extends AbstractService
         }
 
         if (empty($user)) {
-            return $this->throwException(400, "用户{$name}不存在");
+            return $this->resource->throwException(400, "用户{$value}不存在");
         }
         if ($type == 'password' && !$this->hash->check($inputs['password'], $user->password)) {
             return $this->resource->throwException(400, '用户名或者密码错误');

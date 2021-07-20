@@ -90,8 +90,7 @@ class UserRepository extends AbstractRepository
 
     public function getUserData($user)
     {
-        $resourceClass = $this->getResourceClass();
-        $resource = new $resourceClass($user, 'view', $this, 1);
+        $resource = $this->getResourceObj(null, ['resource' => $user, 'scene' => 'view', 'repository' => $this, 'simpleResult' => true]);
 
         return $resource->toArray();
     }

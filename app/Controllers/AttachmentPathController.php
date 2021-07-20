@@ -31,10 +31,10 @@ class AttachmentPathController extends AbstractController
         return $result;
     }
 
-    public function view()
+    public function viewGeneral()
     {
         $repository = $this->getRepositoryObj();
-        $request = $this->getRequestObj('', $repository);
+        $request = $this->getPointRequest('', $repository);
         $info = $this->getPointInfo($repository, $request);
         $parentChains = $repository->getParentChains($info);
         $info['parentChains'] = $parentChains;

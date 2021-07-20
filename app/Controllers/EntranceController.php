@@ -40,7 +40,7 @@ class EntranceController extends AbstractController
 	 */
     public function token()
     {
-        $request = $this->getRequestObj('token');
+        $request = $this->getPointRequest('token');
         return $this->_token($request, ['type' => 'password']);
     }
 

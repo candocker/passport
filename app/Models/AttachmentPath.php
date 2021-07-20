@@ -15,10 +15,11 @@ class AttachmentPath extends AbstractModel
         return $this->hasOne(AttachmentPath::class, 'id', 'parent_id');
     }
 
-    protected function _beforeSave()
+    public function _eventSaving()
     {
         $parent = $this->parentPath;
-        $this->path_full = $parent['path_full'] . '/' . $this->path;
+        $parentPath = empty($parent) ? '' : $parent['path_full'];
+        $this->path_full = $parentPath . $this->path;
         $this->system = !empty($parent) ? $parent['system'] : $this->system;
         $this->createPath();
         return $this;
