@@ -33,6 +33,6 @@ class Attachment extends AbstractModel
         }
         $config = $this->config->get('local_params.attachment.system');
         $host = strval($config[$this->system]['host']);
-        return rtrim($host, '/') . $this->filepath;
+        return rtrim($host, '/') . '/' . $this->filepath;
     }
 }
