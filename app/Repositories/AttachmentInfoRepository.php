@@ -11,7 +11,7 @@ class AttachmentInfoRepository extends AbstractRepository
         return [
             'list' => ['id', 'attachment_id', 'app', 'info_table', 'info_field', 'info_id', 'in_use', 'file'],
             'listSearch' => ['id', 'attachment_id', 'app', 'info_table', 'info_field', 'info_id', 'in_use'],
-            'add' => ['attachment_id', 'app', 'info_table', 'info_field', 'info_id', 'in_use'],
+            'add' => ['attachment_id', 'app', 'info_table', 'info_field', 'info_id'],//, 'in_use'],
         ];
     }
 
