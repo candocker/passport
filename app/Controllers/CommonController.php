@@ -38,8 +38,9 @@ class CommonController extends AbstractController
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
         $config = $this->config->get('local_params.resourcePath');
         $command->createResources($resources, $config);
-        echo get_class($command);
-        print_R($resources);exit();
+        exit();
+        //echo get_class($command);
+        //print_R($resources);exit();
     }
 
     public function oss($action)
