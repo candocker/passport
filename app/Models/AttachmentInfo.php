@@ -11,7 +11,7 @@ class AttachmentInfo extends AbstractModel
     use SoftDeletes;
 
     protected $table = 'attachment_info';
-    protected $fillable = ['name'];
+    protected $guarded = ['id'];
 
     public function attachment()
     {
