@@ -71,4 +71,17 @@ class AttachmentInfoRepository extends AbstractRepository
         }
         return $datas;
     }
+
+    public function getData($params, $onlyUrl = false)
+    {
+        $info = $this->findWhereOne($params);
+        if (empty($info)){
+            return $onlyUrl ? '' : [];
+        }
+        $data = $this->getFileInfo($info, '');
+        if ($onlyUrl) {
+            return $data['filepath'] ?? '';
+        }
+        return $data;
+    }
 }
