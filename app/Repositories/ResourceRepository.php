@@ -8,7 +8,7 @@ class ResourceRepository extends AbstractRepository
     public function cacheResourceDatas()
     {
         $datas = $this->_getDatas();
-        $this->resource->setBaseCache('resource', $datas);
+        $this->setPointCaches('resource', $datas);
         return $datas;
     }
 

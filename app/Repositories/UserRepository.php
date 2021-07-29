@@ -75,7 +75,7 @@ class UserRepository extends AbstractRepository
 	public function getUserPlat($model, $field)
 	{
         return [];
-		$userPlat = $this->getCacheOutData('third', 'userPlat', $model->id, 'user_id');
+		$userPlat = $this->getRpcData('third', 'userPlat', $model->id, 'user_id');
         return $userPlat;
     }
 

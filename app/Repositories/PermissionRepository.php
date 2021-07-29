@@ -8,7 +8,7 @@ class PermissionRepository extends AbstractRepository
     public function cacheRouteDatas()
     {
         $datas = $this->_getDatas();
-        $this->resource->setBaseCache('route', $datas);
+        $this->setPointCaches('permission', $datas);
         return $datas;
     }
 
