@@ -5,6 +5,13 @@ namespace ModulePassport\Repositories;
 
 class PermissionRepository extends AbstractRepository
 {
+    public function cacheRouteDatas()
+    {
+        $datas = $this->_getDatas();
+        $this->setPointCaches('permission', $datas);
+        return $datas;
+    }
+
     protected function _getRoutePath($data, $action)
     {
         if (!empty($data['route'])) {

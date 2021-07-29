@@ -8,11 +8,12 @@ class ResourceRequest extends AbstractRequest
 {
     protected function _addRule()
     {
+        $app = $this->input('app');
         return [
             'code' => [
                 'bail',
                 'required',
-                $this->getRule()->unique('auth_resource')->ignore($this->routeParam('code', 0)),
+                $this->getRule()->unique('auth_resource')->where(function ($query) use ($app) {return $query->where('app', $app);})->ignore($this->routeParam('code', 0)),
             ],
             'name' => ['bail', 'required'],
             'app' => ['required', $this->_getKeyValues('app')],

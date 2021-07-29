@@ -1,7 +1,16 @@
 INSERT INTO `wp_auth_resource` (`app`, `code`, `name`, `controller`, `request`, `model`, `service`, `repository`, `resource`, `collection`) VALUES 
-('bigdata', 'sourceOrder', '源订单', '', '', '1', '', '', '', ''),
-('bigdata', 'dataSync', '源数据同步', '1', '1', '1', '', '1', '1', '1'),
-('culture', 'book', '书籍', '1', '1', '1', '', '1', '1', '1'),
+('culture', 'book-record', '书籍阅读记录', '1', '1', '1', '', '1', '1', '1'),
+('culture', 'calligrapher', '书法家', '1', '1', '1', '', '1', '1', '1'),
+('culture', 'chapter-record', '章节阅读记录', '1', '1', '1', '', '1', '1', '1'),
+('culture', 'rubbing', '碑帖', '1', '1', '1', '', '1', '1', '1'),
+('culture', 'rubbing-page', '碑帖页', '1', '1', '1', '', '1', '1', '1'),
+
+('bigdata', '', '', '1', '1', '1', '', '1', '1', '1'),
+('bigdata', '', '', '1', '1', '1', '', '1', '1', '1'),
+('bigdata', '', '', '1', '1', '1', '', '1', '1', '1'),
+
+('bigdata', 'source-order', '源订单', '', '', '1', '', '', '', ''),
+('bigdata', 'data-sync', '源数据同步', '1', '1', '1', '', '1', '1', '1'),
 
 ('passport', 'manager', '管理员', '1', '1', '1', '1', '1', '1', '1', ''),
 ('passport', 'entrance', '登录/注册', '1', '1', '', '', '', '', '', ''),

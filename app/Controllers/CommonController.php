@@ -37,19 +37,4 @@ class CommonController extends AbstractController
         //echo get_class($command);
         //print_R($resources);exit();
     }
-
-    public function oss($action)
-    {
-        $service = $this->getServiceObj('oss');
-        //$service->dealOldAttachment();
-
-        $service = $this->getServiceObj('oss');
-        //$r = $service->dealDirectory();
-        //$r = $service->dealFileLists();
-        //$r = $service->fileData('d');
-        //$r = $service->dealPut('book/test.jpg', 'a');
-        //$r = $service->getUrl('a');
-        //print_r($r);
-        echo $action;exit();
-    }
 }
