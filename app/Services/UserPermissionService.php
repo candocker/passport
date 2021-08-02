@@ -31,7 +31,7 @@ class UserPermissionService extends AbstractService
     {
         $repository = $this->getRepositoryObj('user');
         $user = $repository->find($id);
-        return $user;
+        return empty($user) ? false : $repository->getUserData($user);
     }
 
     public function getUser($inputs, $type, $addUser = false)

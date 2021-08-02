@@ -67,6 +67,8 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'userData' => ['id' => $this->id, 'name' => $this->name],
+        ];
     }
 }
