@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Listeners;
 
-use Framework\Baseapp\Models\AbstractListener as AbstractListenerBase;
+use Framework\Baseapp\Listeners\AbstractListener as AbstractListenerBase;
 
-class AbstractModel extends AbstractListenerBase
+class AbstractListener extends AbstractListenerBase
 {
 }

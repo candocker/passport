@@ -18,7 +18,27 @@ class TestController extends AbstractController
         $this->$method($request);
     }
 
-    protected function _testCache()
+    public function _testCheckResource($request)
+    {
+        $config = config('database');
+        $command = new \Framework\Baseapp\Commands\GenResourceCommand();
+        $command->checkResource($config['connections']);
+        print_r($config);exit();
+    }
+
+    public function _testResource($request)
+    {
+        $params = $request->all();
+        $resources = $this->resource->getBaseCache('resource');
+        $command = new \Framework\Baseapp\Commands\GenResourceCommand();
+        $config = $this->config->get('local_params.resourcePath');
+        $command->createResources($resources, $config);
+        exit();
+        //echo get_class($command);
+        //print_R($resources);exit();
+    }
+
+    protected function _testCache($request)
     {
         $repository = $this->getRepositoryObj('region');
         //$repository->setPointCaches('region');
@@ -31,8 +51,9 @@ class TestController extends AbstractController
 
     }
 
-    public function _testOss($action)
+    public function _testOss($request)
     {
+        $action = $request->input('param');
         $service = $this->getServiceObj('oss');
         //$service->dealOldAttachment();
 

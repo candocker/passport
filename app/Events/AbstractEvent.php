@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Events;
 
-use Framework\Baseapp\Models\AbstractEvent as AbstractEventBase;
+use Framework\Baseapp\Events\AbstractEvent as AbstractEventBase;
 
-class AbstractModel extends AbstractEventBase
+class AbstractEvent extends AbstractEventBase
 {
 }
