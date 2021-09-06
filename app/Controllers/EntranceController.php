@@ -49,12 +49,15 @@ class EntranceController extends AbstractController
         $service = $this->getServiceObj('userPermission');
         $inputs = $request->all();
         $type = $params['type'];
-        if ($type == 'mobile') {
-            $service->checkInput($inputs, $params);
-        }
-        $datas = [];
+
+        $username = $type == 'mobile' ? $inputs['mobile'] : $inputs['name'];
+        $user = $service->getUser($username);
         $addUser = $params['addUser'] ?? false;
-        $user = $service->getUser($inputs, $type, $addUser);
+        if (empty($user) && $type == 'mobile' && $addUser) {
+            $user = $service->addUserByInput($inputs);
+        }
+        $password = $type == 'mobile' ? false : ($inputs['password'] ?? '');
+        $user = $service->formatLoginUser($user, $password);
 
         $repository = $this->getRepositoryObj('user');
         $datas['user'] = $repository->getUserData($user);

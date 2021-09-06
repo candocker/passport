@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Repositories;
 
+use Swoolecan\Foundation\Helpers\CommonTool;
+
 class UserRepository extends AbstractRepository
 {
     public function getUser($condition)
@@ -12,6 +14,7 @@ class UserRepository extends AbstractRepository
 
     public function addUser($data)
     {
+        $data['name'] = $data['name'] ?? CommonTool::generateUniqueString(10);
         $data['register_ip'] = $this->resource->getIp();
         $data['last_ip'] = $data['register_ip'];
         $data['last_at'] = time();

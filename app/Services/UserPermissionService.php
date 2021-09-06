@@ -34,27 +34,21 @@ class UserPermissionService extends AbstractService
         return empty($user) ? false : $repository->getUserData($user);
     }
 
-    public function getUser($inputs, $type, $addUser = false)
+    public function getUser($username)
     {
         $repository = $this->getRepositoryObj('user');
-        $field = $type == 'password' ? 'name' : 'mobile';
-        $value = $type == 'password' ? $inputs['name'] : $inputs['mobile'];
-        $user = $repository->findBy($field, $value);
-        if (empty($user) && $type == 'mobile' && $addUser) {
-            if (isset($inputs['password'])) {
-                $inputs['password'] = $this->hash->make($inputs['password']);
-            }
-            $user = $repository->addUser($inputs);
-        }
+        $user = $repository->findBy('mobile', $username);
+        $user = empty($user) ? $repository->findBy('name', $username) : $user;
+        return $user;
+    }
 
-        if (empty($user) && $type == 'password') {
-            $user = $repository->findBy('mobile', $value);
-        }
-
+    public function formatLoginUser($user, $password = false)
+    {
         if (empty($user)) {
-            return $this->resource->throwException(400, "用户{$value}不存在");
+            return $this->resource->throwException(400, "用户不存在");
         }
-        if ($type == 'password' && !$this->hash->check($inputs['password'], $user->password)) {
+
+        if ($password !== false && !$this->hash->check($password, $user->password)) {
             return $this->resource->throwException(400, '用户名或者密码错误');
         }
 
@@ -65,6 +59,15 @@ class UserPermissionService extends AbstractService
         $user->recordSignin(['last_ip' => $this->resource->getIp()]);
 
         return $user;
+    }
+
+    public function addUserByInput($inputs)
+    {
+        $repository = $this->getRepositoryObj('user');
+        if (isset($inputs['password'])) {
+            $inputs['password'] = $this->hash->make($inputs['password']);
+        }
+        return $repository->addUser($inputs);
     }
 
     public function getManager($user, $record = true)

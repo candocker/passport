@@ -20,9 +20,10 @@ class TestController extends AbstractController
 
     public function _testCheckResource($request)
     {
-        $config = config('database');
+        $config = $this->config->get('local_params.resourcePath');
+        $dataConfig = config('database');
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
-        $command->checkResource($config['connections']);
+        $command->checkResource($dataConfig['connections'], $config);
         print_r($config);exit();
     }
 

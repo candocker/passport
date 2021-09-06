@@ -35,7 +35,7 @@ class EntranceRequest extends AbstractRequest
                 'name' => ['bail', 'filled', 'string', 'between:2,30', 'unique:user'],
                 'nickname' => ['bail', 'filled', 'string', 'between:2,30'],
             ];
-        default:
+        case 'token':
             return [
                 'name' => ['bail', 'required'],
                 'password' => ['bail', 'required']
@@ -53,6 +53,19 @@ class EntranceRequest extends AbstractRequest
 
     public function messages(): array
     {
+        $scene = $this->getScene();
+        switch ($scene) {
+        case 'signin':
+            return [
+                'mobile' => '手机号有误或者用户不存在',
+                'mobile.exists' => '手机号有误或者用户不存在',
+            ];
+        case 'signup':
+            return [
+                'mobile' => '手机号有误或者用户不存在',
+                'mobile.unique' => '手机号已存在',
+            ];
+        }
         return [
             'name.required' => '请填写用户名',
             'password.required' => '请填写密码',
