@@ -1,4 +1,5 @@
-REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`) SELECT 'admin', `code` FROM `wp_auth_permission` WHERE 1 ;
+TRUNCATE `wp_auth_role_permission`;
+REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`, `created_at`) SELECT 'admin', `code`, `created_at` FROM `wp_auth_permission` WHERE 1 ;
 INSERT INTO `wp_auth_role_permission`(`role_code`, `permission_code`) SELECT 'editor', `code` FROM `wp_auth_permission` WHERE `app` IN ('merchant') ;
 
 
