@@ -27,26 +27,9 @@ class UserController extends AbstractController
 	 */
 	public function myinfo()
 	{
-        try {
-		    $result = $this->getJwt()->getParserData();
-			$userId = isset($result['user_id']) ? $result['user_id'] : 0;
-			if (empty($userId)) {
-				return $this->helper->error(401, '当前登录用户信息有误');
-			}
-
-            $repository = $this->getRepositoryObj();
-			$user = $repository->getUser($userId);
-			if (empty($user)) {
-				return $this->helper->error(401, '当前登录用户信息有误1');
-			}
-			return ['code' => 200, 'message' => 'success', 'data' => $repository->getUserData($user)];
-
-        } catch (\Exception $e) {
-            throw $e;
-			echo 'error jwt';
-			return ;
-        }
-        return $this->helper->error(401, '您没有权限');
+        $user = $this->request->get('current_user');
+        $repository = $this->getRepositoryObj();
+		return ['code' => 200, 'message' => 'success', 'data' => $repository->getUserData($user)];
 	}
 
     protected function getJwt()

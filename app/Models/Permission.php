@@ -11,11 +11,11 @@ class Permission extends AbstractModel
 
     protected $table = 'auth_permission';
 
-    public function _afterDeleted()
+    public function dealDeleting()
     {
-        $this->getPointModel('rolePermission')->where('permission_code', $this->code)->delete();
+        $this->getModelObj('rolePermission')->where('permission_code', $this->code)->delete();
 
-        $this->resource->getObject('repository', 'permission')->cacheRouteDatas();
+        $this->getRepositoryObj('permission')->cacheRouteDatas();
         return $this;
     }
 }

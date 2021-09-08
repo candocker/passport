@@ -71,10 +71,10 @@ class ResourceRepository extends AbstractRepository
     protected function _sceneFields()
     {
         return [
-            'list' => ['app', 'code', 'name', 'controller', 'request', 'service', 'repository', 'resource', 'collection', 'updated_at'],
+            'list' => ['app', 'code', 'name', 'controller', 'request', 'service', 'repository', 'model', 'resource', 'collection', 'updated_at'],
             'listSearch' => ['code', 'app', 'name', 'updated_at'],
-            'add' => ['app', 'code', 'name', 'controller', 'request', 'service', 'repository', 'resource', 'collection'],
-            'update' => ['app', 'code', 'name', 'controller', 'request', 'service', 'repository', 'resource', 'collection'],
+            'add' => ['app', 'code', 'name', 'controller', 'request', 'service', 'repository', 'model', 'resource', 'collection'],
+            'update' => ['app', 'code', 'name', 'controller', 'request', 'service', 'repository', 'model', 'resource', 'collection'],
         ];
     }
 
@@ -91,7 +91,7 @@ class ResourceRepository extends AbstractRepository
 
     protected function _getElems()
     {
-        return ['controller', 'request', 'service', 'repository', 'resource', 'collection'];
+        return ['controller', 'request', 'service', 'repository', 'model', 'resource', 'collection'];
     }
 
     protected function _getDatas()

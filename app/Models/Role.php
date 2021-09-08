@@ -12,10 +12,10 @@ class Role extends AbstractModel
     protected $fillable = ['name', 'code', 'description'];
     protected $useCacheBuilder = true;
 
-    protected function _afterDeleted()
+    public function dealDeleting()
     {
-        $this->getPointModel('roleManager')->where('role_code', $this->code)->delete();
-        $this->getPointModel('rolePermission')->where('role_code', $this->code)->delete();
+        $this->getModelObj('roleManager')->where('role_code', $this->code)->delete();
+        $this->getModelObj('rolePermission')->where('role_code', $this->code)->delete();
     }
 
     public function permissions()

@@ -117,6 +117,7 @@ class PermissionRepository extends AbstractRepository
             if (empty($action)) {
                 continue ;
             }
+            $callback = in_array($action, ['listinfo', 'add', 'update', 'delete', 'view']) ? $action . 'General' : $action;
             $method = (array) explode(',', $info['method']);
             $method = array_filter(array_unique($method));
             if (empty($method)) {
@@ -128,14 +129,21 @@ class PermissionRepository extends AbstractRepository
 
             $app = $info['app'];
             $controller = $this->resource->formatClass('controller', $info['resource_code'], $app);
+            $path = $this->_getRoutePath($info, $action);
+            $path = $this->_formatPath($path);
             $datas[$app][$info['controller']][$action] = [
                 'code' => $info['code'],
                 'method' => $method,
-                'path' => $this->_getRoutePath($info, $action),
-                'callback' => $controller . '@' . $this->resource->strOperation($action, 'camel'),
+                'path' => $path,
+                'callback' => $controller . '@' . $this->resource->strOperation($callback, 'camel'),
             ];
         }
     
         return $datas;
+    }
+
+    protected function _formatPath($path)
+    {
+        return $path;
     }
 }

@@ -12,6 +12,7 @@ use Hyperf\HttpMessage\Cookie\Cookie;
 use Framework\Baseapp\Services\EasysmsService;
 use ModulePassport\Requests\SendCodeRequest;
 use ModulePassport\Requests\ValidateCodeRequest;
+use ModulePassport\Requests\ValidateCaptchaRequest;
 
 class CommonController extends AbstractController
 {
@@ -41,27 +42,26 @@ class CommonController extends AbstractController
                         ->withBody(new SwooleStream($output));
     }
 
-	public function actionCheckCaptcha()
-	{
-		return $this->checkCommon('captcha');
-	}
-
-	public function sendCode(SendCodeRequest $request)
-	{
-        $data = $request->all();
-		return $this->getServiceObj('easysms')->sendCode($data);
-		return $this->easysmsService->sendCode($data);
-	}
-
-	public function validateCode(ValidateCodeRequest $request)
-	{
-        $data = $request->all();
-		return $this->easysmsService->validateCode($data);
-	}
-
-    protected function checkCommon($field)
+    public function sendCode(SendCodeRequest $request)
     {
-		$data = $this->_formatInput([$field]);
-		return $this->getModel()->checkCommon($field, $data[$field]);
+        $data = $request->all();
+        return $this->getServiceObj('easysms')->sendCode($data);
+    }
+
+    public function validateCode(ValidateCodeRequest $request)
+    {
+        $data = $request->all();
+        return $this->getServiceObj('easysms')->validateCode($data);
+    }
+
+    public function createResource()
+    {
+        $resources = $this->resource->getBaseCache('resource');
+        $command = new \Framework\Baseapp\Commands\GenResourceCommand();
+        $config = $this->config->get('local_params.resourcePath');
+        $command->createResources($resources, $config);
+        exit();
+        //echo get_class($command);
+        //print_R($resources);exit();
     }
 }

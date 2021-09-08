@@ -25,7 +25,7 @@ class RoleRepository extends AbstractRepository
 
     public function permissionData($model, $field)
     {
-        $permission = $this->resource->getObject('repository', 'permission');
+        $permission = $this->getRepositoryObj('permission');
         $trees = $permission->getTreeInfos();
         $datas = $model->permissions->keyBy('permission_code');
         $checked = $datas->keys();
@@ -51,7 +51,7 @@ class RoleRepository extends AbstractRepository
 
         $noPermissions = [];
         foreach ($olds as $old) {
-            echo get_class($old) . '=====' . $old->permission_code;
+            //echo get_class($old) . '=====' . $old->permission_code;
             if (!in_array($old->permission_code, $permissions)) {
                 $noPermissions[] = $old->permission_code;
             }

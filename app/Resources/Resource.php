@@ -2,8 +2,6 @@
 
 namespace ModulePassport\Resources;
 
-use Framework\Baseapp\Resources\AbstractResource;
-
 class Resource extends AbstractResource
 {
 

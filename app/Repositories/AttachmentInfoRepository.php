@@ -11,7 +11,7 @@ class AttachmentInfoRepository extends AbstractRepository
         return [
             'list' => ['id', 'attachment_id', 'app', 'info_table', 'info_field', 'info_id', 'in_use', 'file'],
             'listSearch' => ['id', 'attachment_id', 'app', 'info_table', 'info_field', 'info_id', 'in_use'],
-            'add' => ['attachment_id', 'app', 'info_table', 'info_field', 'info_id', 'in_use'],
+            'add' => ['attachment_id', 'app', 'info_table', 'info_field', 'info_id'],//, 'in_use'],
         ];
     }
 
@@ -40,7 +40,7 @@ class AttachmentInfoRepository extends AbstractRepository
 
     protected function _appKeyDatas()
     {
-        return $this->resource->getObject('repository', 'attachmentPath')->_systemKeyDatas();
+        return $this->getRepositoryObj('attachmentPath')->_systemKeyDatas();
     }
 
     public function getHaveSelection($scene)
@@ -70,5 +70,18 @@ class AttachmentInfoRepository extends AbstractRepository
             $datas[] = $this->getFileInfo($info, '');
         }
         return $datas;
+    }
+
+    public function getData($params, $onlyUrl = false)
+    {
+        $info = $this->findWhereOne($params);
+        if (empty($info)){
+            return $onlyUrl ? '' : [];
+        }
+        $data = $this->getFileInfo($info, '');
+        if ($onlyUrl) {
+            return $data['filepath'] ?? '';
+        }
+        return $data;
     }
 }

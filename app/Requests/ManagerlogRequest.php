@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Requests;
 
-class InfoAttachmentRequest extends AbstractRequest
+class ManagerlogRequest extends AbstractRequest
 {
     protected function _updateRule()
     {

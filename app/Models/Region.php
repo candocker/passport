@@ -123,15 +123,6 @@ class Region extends AbstractModel
         ];
     }
 
-	public function getLevelInfos()
-	{
-		return [
-			'province' => '省级',
-			'city' => '市级',
-			'county' => '区县',
-		];
-	}
-
     public function formatOperation($view)
     {
 		static $pInfo;
