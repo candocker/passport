@@ -31,4 +31,15 @@ class CommonController extends AbstractController
         $data = $request->all();
         return $this->getServiceObj('easysms')->validateCode($data);
     }
+
+    public function createResource()
+    {
+        $resources = $this->resource->getBaseCache('resource');
+        $command = new \Framework\Baseapp\Commands\GenResourceCommand();
+        $config = $this->config->get('local_params.resourcePath');
+        $command->createResources($resources, $config);
+        exit();
+        //echo get_class($command);
+        //print_R($resources);exit();
+    }
 }
