@@ -25,7 +25,7 @@ class AttachmentController extends AbstractController
     public function upload()
     {
         $repository = $this->getRepositoryObj();
-        $request = $this->getRequestObj('upload', $repository);
+        $request = $this->getPointRequest('upload', $repository);
 
         $pathId = $request->input('path_id');
         $path = '/';
@@ -36,7 +36,7 @@ class AttachmentController extends AbstractController
             $system = $pathInfo['system'];
         }
         $service = $this->getServiceObj('attachment');
-        $fileData = $service->saveFile($system, $path, $this->request->file('file'));
+        $fileData = $service->saveFile($system, $path, $request->file('file'));
         $fileData['path_id'] = $pathId;
         $info = $repository->create($fileData);
         $data = $info->toArray();

@@ -10,6 +10,7 @@ class AttachmentPathObserver
 {
     public function saving(AttachmentPath $attachmentPath)
     {
+        return true;
         return $attachmentPath->_eventSaving();
     }
 }

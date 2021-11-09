@@ -45,7 +45,7 @@ class AttachmentRequest extends AbstractRequest
                     $query->where('system', 'like', 'local%');
                 }),
             ],
-            //'file' => ['bail', 'required', 'file'],
+            'file' => ['bail', 'required', 'file'],
         ];
         if ($params['path_id'] === '0' || $params['path_id'] === 0) {
             unset($rules['path_id']);

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Services;
 
-use Framework\Baseapp\Tools\CommonTool;
+use Swoolecan\Foundation\Helpers\CommonTool;
 
 class AttachmentService extends AbstractService
 {
@@ -14,7 +14,7 @@ class AttachmentService extends AbstractService
         foreach ($files as $file) {
             if ($file['type'] == 'dir') {
                 $this->_createPath($file['basename'], $this->formatPath($path));
-                $this->createPaths($driver, $file['path']);
+                $this->createPaths($system, $file['path']);
             }
         }
 
@@ -120,21 +120,22 @@ class AttachmentService extends AbstractService
 
     public function saveFile($system, $path, $file)
     {
-        $extension = $file->getExtension();
-        $fileInfo = $file->toArray();
+        $extension = $file->getClientOriginalExtension();
         $data = [
-            'size' => $fileInfo['size'],
-            'name' => str_replace(".{$extension}", '', $fileInfo['name']),
-            'filename' => $fileInfo['name'],
-            'mime_type' => $fileInfo['type'],
+            'size' => $file->getSize(),
+            'name' => str_replace(".{$extension}", '', $file->getClientOriginalName()),
+            'filename' => $file->getClientOriginalName(),
+            'mime_type' => $file->getClientMimeType(),
             'system' => $system,
             'extension' => $extension,
         ];
         $driver = $this->getFileDriver($system);
         $driver->createDir($path);
         $newPath = $driver->getAdapter()->applyPathPrefix($path);
+        echo $newPath;
         $fileName = CommonTool::generateUniqueString(16) . ".{$extension}";
-        $file->moveTo($newPath . "/{$fileName}");
+        //$file->moveTo($newPath . "/{$fileName}");
+        $file->storeAs($path, $fileName, $system);
         $r = $driver->setVisibility($path . "/{$fileName}", 'public');
         $data['filepath'] = ltrim($path . "/{$fileName}", '/');
         return $data;
@@ -142,6 +143,6 @@ class AttachmentService extends AbstractService
 
     protected function getFileDriver($system)
     {
-        return Storage::disk($system);
+        return \Storage::disk($system);
     }
 }
