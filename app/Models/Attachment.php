@@ -8,7 +8,7 @@ class Attachment extends AbstractModel
     protected $table = 'attachment';
     protected $fillable = ['path_id', 'name', 'tag', 'system', 'filepath', 'business', 'mime_type', 'size', 'filename', 'type', 'extension'];
 
-    protected function _beforeSave()
+    public function _beforeSave()
     {
         if ($this->path_id) {
             $path = $this->path;
@@ -17,7 +17,7 @@ class Attachment extends AbstractModel
         if (empty($this->name)) {
             $this->name = str_replace(".{$this->extension}", '', $this->filename);
         }
-        $this->filepath = '/' . ltrim($this->filepath, '/');
+        $this->filepath = ltrim($this->filepath, '/');
         return $this;
     }
 

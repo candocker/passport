@@ -10,7 +10,7 @@ class AttachmentPathRepository extends AbstractRepository
         return [
             'list' => ['id', 'path', 'parent_id', 'system', 'path_full', 'name', 'type', 'created_at'],
             'listSearch' => ['id', 'parent_id', 'system', 'business', 'path_full', 'name', 'type', 'created_at'],
-            'keyvalueSearch' => ['id', 'parent_id', 'path', 'path_full', 'name', 'type', 'created_at'],
+            'keyvalueExtSearch' => ['id', 'parent_id', 'path', 'path_full', 'name', 'type', 'created_at'],
             'add' => ['system', 'business', 'parent_id', 'path', 'name', 'tag', 'type', 'status'],
             'update' => ['business', 'name', 'tag', 'type', 'status'],
         ];

@@ -88,7 +88,7 @@ class UserRepository extends AbstractRepository
         if (!empty($userPlat) && !empty($userPlat['headimgurl'])) {
             return $userPlat['headimgurl'];
         }*/
-        return 'http://ossfile.canliang.wang/common/2b3dc89a-569b-49f8-81d5-595fb9b95ba8.jpeg';
+        return 'http://ossfile.canliang.wang/book/common/2b3dc89a-569b-49f8-81d5-595fb9b95ba8.jpeg';
 	}
 
     public function getUserData($user)
