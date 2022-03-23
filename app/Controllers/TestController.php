@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Controllers;
 
+use Illuminate\Support\Str;
+
 class TestController extends AbstractController
 {
     public function test()
@@ -56,13 +58,34 @@ class TestController extends AbstractController
 
     }
 
+    public function _testAttachmentInfo()
+    {
+        $model = $this->getModelObj('attachment');
+        //$infos = $model->where(['system' => 'ossfree'])->where('extfield', '>', '0')->whereIn('path_id', [1414, 1417])->get();
+        $infos = $model->where(['system' => 'ossfree'])->where('extfield', '1')->whereIn('path_id', [1415, 1418, 1419, 1420, 1421, 1422])->get();
+        $sql = '';
+        foreach ($infos as $info) {
+            $sql .= $info->dispatchInfo('book');
+        }
+        echo "\n" . $sql;
+        exit();
+    }
+
     public function _testOss($request)
     {
         $action = $request->input('param');
         $service = $this->getServiceObj('oss');
+
+        //$r = $service->dealDirectory();
+        //$r = $service->fileData('d');
+        //$r = $service->dealPut('book/test.jpg', 'a');
+        //$r = $service->getUrl('a');
+        //print_r($r);
+
         //$r = $service->checkOssFiles();exit();
         //$r = $service->checkOssRemote();exit();
         //$r = $service->checkInfoDatas();exit();
+        //$r = $service->putFile(['a' => 'b'], 'book/' . Str::uuid() . '.jpg', 'a');
         //$service->dealOldAttachment();
 
         $model = $this->getModelObj('attachment');
@@ -81,64 +104,8 @@ class TestController extends AbstractController
         echo "\n";
         exit();*/
 
-        $path = '/data/htmlwww/filesys/culture/';
-        $url = 'http://upfile.canliang.wang/culture/';
-        $files = scandir($path);
-        foreach ($files as $dir) {
-            if (in_array($dir, ['.', '..'])) {
-                continue;
-            }
-            if ($dir != 'figure') {
-                continue;
-            }
-            $subFiles = scandir($path . '/' . $dir);
-            foreach ($subFiles as $subFile) {
-                if (in_array($subFile, ['.', '..'])) {
-                    continue;
-                }
-                $fileUrl = $url . $dir . '/' . $subFile;
-                $this->checkAttachment($subFile, $fileUrl);
-                //echo "<a href='{$fileUrl}' target='_blank'>{$fileUrl}</a><br />";
-            }
-            //print_R($subFiles);
-        }
-        print_r($files);exit();
-
         $service = $this->getServiceObj('oss');
-        //$r = $service->dealDirectory();
-        //$r = $service->fileData('d');
-        //$r = $service->dealPut('book/test.jpg', 'a');
-        //$r = $service->getUrl('a');
-        //print_r($r);
         echo $action;exit();
-    }
-
-    protected function checkAttachment($file, $fileUrl)
-    {
-        static $i = 1;
-        $model = $this->getModelObj('attachment');
-        $infoModel = $this->getModelObj('attachmentInfo');
-        $info = $model->where(['filename' => $file])->first();
-        $baseFile = substr($file, 0, strrpos($file, '.'));
-        $baseFile = substr($baseFile, intval(strrpos($baseFile, '·')));
-        $baseFile = str_replace('·', '', $baseFile);
-        //echo $file . '-' . $baseFile;exit();
-        $figureModel = $this->getModelObj('culture-figure');
-        $figure = $figureModel->where('name', 'like', "%{$baseFile}%")->get();
-        if ($info) {
-            $attachmentInfo = $infoModel->where('attachment_id', $info['id'])->first();
-            //if (empty($attachmentInfo)) {
-            //echo "<a href='http://ossfile.canliang.wang/{$info['filepath']}' target='_blank'>yyyyy<a>-" . $info['name'] . '===' . $info['filepath'] . "<img src='http://ossfile.canliang.wang/{$info['filepath']}' width='200px' height='200px' />==<img src='{$fileUrl}' width='200px' height='200px' /><br />";
-            $i++;
-            //}
-        } else {
-            //$info = $model->where('name', 'like', "%{$baseFile}%")->first();
-            if (empty($info)) {
-            } else {
-            //echo "<a href='http://ossfile.canliang.wang/{$info['filepath']}' target='_blank'>yyyyy<a>-" . $info['name'] . '===' . $info['filepath'] . "<img src='http://ossfile.canliang.wang/{$info['filepath']}' width='200px' height='200px' />==<img src='{$fileUrl}' width='200px' height='200px' /><br />";
-            //echo $i . '--' . "<a href='{$fileUrl}' target='_blank'>{$fileUrl}</a><br />";
-            }
-        }
     }
 
     public function _test()

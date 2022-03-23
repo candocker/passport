@@ -11,7 +11,7 @@ class AttachmentRepository extends AbstractRepository
         return [
             'pop' => ['id', 'path_id', 'name', 'tag', 'filepath', 'extension', 'created_at'],
             'popSearch' => ['id', 'path_id', 'name', 'extension', 'created_at'],
-            'list' => ['id', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension', 'created_at'],
+            'list' => ['id', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension', 'created_at', 'point_operation'],
             'view' => ['id', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension', 'created_at'],
             'listSearch' => ['id', 'path_id', 'name', 'tag', 'filepath', 'mime_type', 'size', 'filename', 'extension', 'created_at'],
             'add' => ['system', 'path_id', 'files'],
@@ -97,5 +97,17 @@ class AttachmentRepository extends AbstractRepository
         return [
             'filepath' => ['width' => '180'],
         ];
+    }
+
+    protected function _pointOperations($model, $field)
+    {
+        $change = [
+            'name' => '更换资源',
+            'type' => 'popForm',
+            'resource' => 'attributeValue',
+            'app' => $this->getAppcode(),
+            'params' => ['attribute_id' => $model->id],
+        ];
+        return [$change];
     }
 }

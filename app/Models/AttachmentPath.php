@@ -19,7 +19,7 @@ class AttachmentPath extends AbstractModel
     {
         $parent = $this->parentPath;
         $parentPath = empty($parent) ? '' : $parent['path_full'];
-        $this->path_full = $parentPath . $this->path;
+        $this->path_full = $parentPath . '/' . $this->path;
         $this->system = !empty($parent) ? $parent['system'] : $this->system;
         $this->createPath();
         return $this;
