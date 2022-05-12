@@ -18,6 +18,18 @@ class Attachment extends AbstractModel
             $this->name = str_replace(".{$this->extension}", '', $this->filename);
         }
         $this->filepath = ltrim($this->filepath, '/');
+        $filepathOld = $this->getOriginal('filepath');
+        if ($this->filepath != $filepathOld) {
+            $service = $this->getServiceObj('attachment');
+            $service->deleteFiles($this->getOriginal('system'), $filepathOld);
+        }
+        return $this;
+    }
+
+    public function _afterDeleted()
+    {
+        $service = $this->getServiceObj('attachment');
+        $service->deleteFiles($this->getOriginal('system'), $this->filepath);
         return $this;
     }
 

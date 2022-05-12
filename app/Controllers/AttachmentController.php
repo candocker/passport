@@ -16,9 +16,9 @@ class AttachmentController extends AbstractController
         }
 
         $data = $request->getInputDatas('create');
-        $result = $repository->create($data);
-        $data = $result->toArray();
-        $data['filepath'] = $result->getFullFilepath();
+        $info = $this->saveInfo($request, $repository, $data);
+        $data = $info->toArray();
+        $data['filepath'] = $info->getFullFilepath();
         return $this->success($data);
     }
 
@@ -38,9 +38,20 @@ class AttachmentController extends AbstractController
         $service = $this->getServiceObj('attachment');
         $fileData = $service->saveFile($system, $path, $request->file('file'));
         $fileData['path_id'] = $pathId;
-        $info = $repository->create($fileData);
+        $info = $this->saveInfo($request, $repository, $fileData);
         $data = $info->toArray();
+        \Log::debug('aaaaaaaaa-' . serialize($data));
         $data['filepath'] = $info->getFullFilepath();
         return $this->success($data);
+    }
+
+    protected function saveInfo($request, $repository, $data)
+    {
+        $attachmentId = $request->input('attachment_id');
+        $attachmentInfo = $attachmentId ? $this->getModelObj('attachment')->find($attachmentId) : false;
+        if (empty($attachmentId) || empty($attachmentInfo)) {
+            return $repository->create($data);
+        }
+        return $repository->updateInfo($attachmentInfo, $data);
     }
 }

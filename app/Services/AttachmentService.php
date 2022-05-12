@@ -132,13 +132,20 @@ class AttachmentService extends AbstractService
         $driver = $this->getFileDriver($system);
         $driver->createDir($path);
         $newPath = $driver->getAdapter()->applyPathPrefix($path);
-        echo $newPath;
+        //echo $newPath;
         $fileName = CommonTool::generateUniqueString(16) . ".{$extension}";
         //$file->moveTo($newPath . "/{$fileName}");
         $file->storeAs($path, $fileName, $system);
         $r = $driver->setVisibility($path . "/{$fileName}", 'public');
         $data['filepath'] = ltrim($path . "/{$fileName}", '/');
         return $data;
+    }
+
+    public function deleteFiles($system, $files)
+    {
+        $driver = $this->getFileDriver($system);
+        $driver->delete((array) $files);
+        return true;
     }
 
     protected function getFileDriver($system)

@@ -13,4 +13,10 @@ class AttachmentObserver
         $attachment->_beforeSave();
         return true;
     }
+
+    public function deleted(Attachment $attachment)
+    {
+        $attachment->_afterDeleted();
+        return true;
+    }
 }
