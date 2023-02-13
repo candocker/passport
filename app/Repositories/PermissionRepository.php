@@ -32,7 +32,7 @@ class PermissionRepository extends AbstractRepository
     protected function _sceneFields()
     {
         return [
-            'list' => ['name', 'app', 'code', 'parent_code', 'resource_code', 'controller', 'route', 'route_path', 'action', 'method', 'display', 'updated_at'],
+            'list' => ['name', 'app', 'code', 'parent_code', 'resource_code', 'controller', 'route', 'route_path', 'action', 'method', 'display', 'updated_at', 'extparam'],
             //'base' => ['name', 'app', 'code', 'controller', 'route', 'action', 'method'],
             'view' => ['name', 'app', 'code', 'controller', 'route', 'action', 'method'],
             'listSearch' => ['code', 'app', 'resource_code', 'parent_code', 'name', 'updated_at'],

@@ -10,6 +10,7 @@ class TestController extends AbstractController
 {
     public function test()
     {
+        \Log::debug('test-' . serialize($this->request->all()));
         $request = $this->request;
         $inTest = config('app.inTest');
         if (empty($inTest)) {
@@ -35,7 +36,7 @@ class TestController extends AbstractController
         \DB::update("REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`, `created_at`) SELECT 'admin', `code`, `created_at` FROM `wp_auth_permission` WHERE 1 ;");
         $this->getRepositoryObj('resource')->cacheResourceDatas();
         $this->getRepositoryObj('permission')->cacheRouteDatas();
-        $params = $request->all();
+        //$params = $request->all();
         $resources = $this->resource->getBaseCache('resource');
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
         $config = $this->config->get('local_params.resourcePath');

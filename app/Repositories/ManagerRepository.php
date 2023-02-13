@@ -18,10 +18,10 @@ class ManagerRepository extends AbstractRepository
     protected function _sceneFields()
     {
         return [
-            'list' => ['id', 'nickname', 'user_id', 'created_at', 'updated_at', 'signin_first', 'signin_num', 'last_ip', 'last_at', 'status'],
+            'list' => ['id', 'nickname', 'user_id', 'role', 'created_at', 'updated_at', 'signin_first', 'signin_num', 'last_ip', 'last_at', 'status'],
             'listSearch' => ['id', 'nickname', 'user_id', 'created_at', 'last_at', 'status'],
-            'add' => ['nickname', 'user_id', 'status'],
-            'update' => ['nickname', 'user_id', 'status'],
+            'add' => ['nickname', 'user_id', 'role', 'status'],
+            'update' => ['nickname', 'user_id', 'role', 'status'],
         ];
     }
 
