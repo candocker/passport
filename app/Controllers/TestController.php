@@ -10,7 +10,6 @@ class TestController extends AbstractController
 {
     public function test()
     {
-        \Log::debug('test-' . serialize($this->request->all()));
         $request = $this->request;
         $inTest = config('app.inTest');
         if (empty($inTest)) {

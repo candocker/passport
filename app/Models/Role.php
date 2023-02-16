@@ -12,7 +12,7 @@ class Role extends AbstractModel
     protected $fillable = ['name', 'code', 'description'];
     protected $useCacheBuilder = true;
 
-    public function dealDeleting()
+    public function afterDeleted()
     {
         $this->getModelObj('roleManager')->where('role_code', $this->code)->delete();
         $this->getModelObj('rolePermission')->where('role_code', $this->code)->delete();
@@ -31,6 +31,16 @@ class Role extends AbstractModel
         foreach ($rPermissions as $rPermission){
             $datas[$rPermission['permission_code']] = $rPermission->permission;
         }
+        if (!empty($datas)) {
+            $tmps = collect($datas);
+            $tmps = $tmps->sortByDesc('orderlist');
+            $result = [];
+            foreach ($tmps as $key => $tmp) {
+                $result[$key] = $tmp;
+            }
+            $datas = $result;
+        }
+
         if ($onlyKey) {
             return array_keys($datas);
         }

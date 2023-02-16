@@ -35,9 +35,36 @@ class EntranceController extends AbstractController
         return $this->_token($request, ['type' => 'mobile']);
     }
 
-	/**
- 	 * 获取token
-	 */
+    /**
+     * 获取token
+     */
+    public function managerToken()
+    {
+        $request = $this->getPointRequest('managerToken');
+
+        $service = $this->getServiceObj('managerPermission');
+        $inputs = $request->all();
+        $type = $params['type'];
+
+        $username = $type == 'mobile' ? $inputs['mobile'] : $inputs['name'];
+        $user = $service->getUser($username);
+        $addUser = $params['addUser'] ?? false;
+        if (empty($user) && $type == 'mobile' && $addUser) {
+            $user = $service->addUserByInput($inputs);
+        }
+        $password = $type == 'mobile' ? false : ($inputs['password'] ?? '');
+        $user = $service->formatLoginUser($user, $password);
+
+        $repository = $this->getRepositoryObj('user');
+        $datas['user'] = $repository->getUserData($user);
+        $datas['access_token'] = $this->_getToken('login', $user);
+        $datas['expires_in'] = $this->_getTTL();
+        return $this->success($datas);
+    }
+
+    /**
+     * 获取token
+     */
     public function token()
     {
         $request = $this->getPointRequest('token');

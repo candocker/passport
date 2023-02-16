@@ -29,4 +29,30 @@ class Manager extends AbstractModel
     {
         return $this->hasMany(RoleManager::class, 'manager_id', 'id');
     }
+
+    public function getRole()
+    {
+        $roles = $this->roleManagers;
+        $result = ['source' => [], 'show' => ''];
+        foreach ($roles as $roleManager) {
+            $result['source'][] = $roleManager->role['code'];
+            $result['show'] .= ', ' . $roleManager->role['name'];
+        }
+        return $result;
+    }
+
+    public function afterSave()
+    {
+        $request = request();
+        $roles = $request->input('role');
+        if (!is_null($roles)) {
+            $model = $this->getModelObj('roleManager');
+            $model->where('manager_id', $this->id)->delete();
+            foreach ($roles as $role) {
+                $model->createRecord($role, $this);
+            }
+        }
+
+        return true;
+    }
 }

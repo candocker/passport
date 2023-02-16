@@ -18,8 +18,15 @@ class ManagerlogRepository extends AbstractRepository
     protected function _sceneFields()
     {
         return [
-            'list' => ['id', 'nickname', 'user_id', 'created_at', 'updated_at', 'signin_first', 'signin_num', 'last_ip', 'last_at', 'status'],
-            'listSearch' => ['id', 'nickname', 'user_id', 'created_at', 'last_at', 'status'],
+            'list' => ['id', 'manager_id', 'manager_name', 'role', 'menu_code', 'menu_name', 'created_at', 'data', 'data_pre'],
+            'listSearch' => ['id', 'manager_id', 'manager_name', 'role', 'menu_code', 'menu_name', 'created_at'],
+        ];
+    }
+
+    public function getShowFields()
+    {
+        return [
+            //'data' => ['showType' => 'hidden'],
         ];
     }
 
@@ -41,10 +48,8 @@ class ManagerlogRepository extends AbstractRepository
     public function _getFieldOptions()
     {
         return [
-            'signin_num' => ['width' => '60'],
-            'nickname' => ['width' => '120'],
-            'user_id' => ['width' => '100'],
-            'last_ip' => ['width' => '120'],
+            'data' => ['hidden' => 1],
+            'data_pre' => ['hidden' => 1],
         ];
     }
 }

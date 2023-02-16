@@ -1,5 +1,5 @@
-TRUNCATE `wp_auth_role_permission`;
-REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`, `created_at`) SELECT 'admin', `code`, `created_at` FROM `wp_auth_permission` WHERE 1 ;
+DELETE FROM `wp_auth_role_permission` WHERE `role_code` = 'super';
+REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`, `created_at`) SELECT 'super', `code`, `created_at` FROM `wp_auth_permission` WHERE 1 ;
 INSERT INTO `wp_auth_role_permission`(`role_code`, `permission_code`) SELECT 'editor', `code` FROM `wp_auth_permission` WHERE `app` IN ('merchant') ;
 
 
@@ -12,3 +12,5 @@ UPDATE `wp_auth_permission` SET `method` = 'delete' WHERE `app` IN ('culture') A
 UPDATE `wp_auth_permission` SET `method` = 'get' WHERE `app` IN ('culture') AND `method` = '' AND `action` != '';
 
 
+
+------ TRUNCATE `wp_auth_role_permission`;

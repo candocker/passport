@@ -11,6 +11,11 @@ class Permission extends AbstractModel
 
     protected $table = 'auth_permission';
 
+    public function parentInfo()
+    {
+        return $this->hasOne(Permission::class, 'code', 'parent_code');
+    }
+
     public function dealDeleting()
     {
         $this->getModelObj('rolePermission')->where('permission_code', $this->code)->delete();

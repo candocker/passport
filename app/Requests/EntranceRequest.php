@@ -35,6 +35,11 @@ class EntranceRequest extends AbstractRequest
                 'name' => ['bail', 'filled', 'string', 'between:2,30', 'unique:user'],
                 'nickname' => ['bail', 'filled', 'string', 'between:2,30'],
             ];
+        case 'managerToken':
+            return [
+                'name' => ['bail', 'required'],
+                'password' => ['bail', 'required']
+            ];
         case 'token':
             return [
                 'name' => ['bail', 'required'],

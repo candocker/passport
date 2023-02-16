@@ -27,8 +27,15 @@ class RoleRepository extends AbstractRepository
     {
         $permission = $this->getRepositoryObj('permission');
         $trees = $permission->getTreeInfos();
-        $datas = $model->permissions->keyBy('permission_code');
-        $checked = $datas->keys();
+        $datas = $model->permissions;//->keyBy('permission_code');
+        $checked = [];
+        foreach ($datas as $data) {
+            if (empty($data->permission['parent_code']) || empty($data->permission->parentInfo['parent_code'])) {
+                continue;
+            }
+            $checked[] = $data->permission['code'];
+        }
+        //$checked = $datas->keys();
         return ['checked' => $checked, 'trees' => $trees];
         //return $permission->getTreeInfos($model->getFormatPermissions());
     }
@@ -38,11 +45,25 @@ class RoleRepository extends AbstractRepository
         $olds = $info->permissions->keyBy('permission_code');
         $exists = $olds->keys()->toArray();
         $rolePermission = $this->getModelObj('rolePermission');
+        $pModel = $this->getModelObj('permission');
+        $formatedPermissions = [];
         foreach ($permissions as $newPermission) {
-            if (!in_array($newPermission, $exists)) {
+            $permission = $pModel->where(['code' => $newPermission])->first();
+            if (empty($permission)) {
+                continue;
+            }
+            $formatedPermissions[] = $newPermission;
+            if (!empty($permission->parentInfo)) {
+                $formatedPermissions[] = $permission->parentInfo['parent_code'];
+                $formatedPermissions[] = $permission->parentInfo['code'];
+            }
+        }
+        $formatedPermissions = array_filter(array_unique($formatedPermissions));
+        foreach ($formatedPermissions as $fPermission) {
+            if (!in_array($fPermission, $exists)) {
                 $newData = [
                     'role_code' => $info->code,
-                    'permission_code' => $newPermission,
+                    'permission_code' => $fPermission,
                     'created_at' => date('Y-m-d H:i:s', time()),
                 ];
                 $rolePermission->create($newData);
@@ -52,7 +73,7 @@ class RoleRepository extends AbstractRepository
         $noPermissions = [];
         foreach ($olds as $old) {
             //echo get_class($old) . '=====' . $old->permission_code;
-            if (!in_array($old->permission_code, $permissions)) {
+            if (!in_array($old->permission_code, $formatedPermissions)) {
                 $noPermissions[] = $old->permission_code;
             }
         }

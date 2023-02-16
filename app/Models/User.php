@@ -14,6 +14,7 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract
     use Authenticatable;
     use TraitUser;
 
+    //protected $connection = 'double6';
     protected $table = 'user';
     protected $primaryKey = 'id';
     protected $guarded = ['created_at', 'last_login_at', 'updated_at'];

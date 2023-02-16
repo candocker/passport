@@ -6,7 +6,7 @@ namespace ModulePassport\Services;
 use Illuminate\Hashing\BcryptHasher;
 use Carbon\Carbon;
 
-class UserPermissionService extends AbstractService
+class ManagerPermissionService extends AbstractService
 {
     protected $hash;
 
@@ -52,10 +52,9 @@ class UserPermissionService extends AbstractService
             return $this->resource->throwException(400, '用户名或者密码错误');
         }
 
-        $userName = $user['name'] ?? $user['userName'];
         $enable = $user->checkEnable();
         if (!$enable) {
-            return $this->resource->throwExceoption(405, "用户{$userName}已禁用");
+            return $this->throwExceoption(405, "用户{$name}已禁用");
         }
         $user->recordSignin(['last_ip' => $this->resource->getIp()]);
 
@@ -74,16 +73,14 @@ class UserPermissionService extends AbstractService
     public function getManager($user, $record = true)
     {
         $repository = $this->getRepositoryObj("manager");
-        $manager = $repository->findBy('user_id', $user['id']);
-        $userName = $user['name'] ?? $user['userName'];
-
+        $manager = $repository->findBy('user_id', $user->id);
         if (empty($manager)) {
-            return $this->resource->throwException(400, "用户{$userName}不是管理员");
+            return $this->throwException(400, "用户{$user['name']}不是管理员");
         }
 
         $enable = $manager->checkEnable();
         if (!$enable) {
-            return $this->resource->throwException(405, "用户{$userName}管理权限已禁用");
+            return $this->throwException(405, "用户{$user['name']}管理权限已禁用");
         }
         $manager->recordSignin(['last_ip' => $this->resource->getIp()]);
         return $manager;
@@ -95,30 +92,49 @@ class UserPermissionService extends AbstractService
         $permissionRepository = $this->getRepositoryObj('permission');
         $datas = [];
         foreach ($roleManagers as $roleManager) {
-            $permissions = $roleManager->role->getFormatPermissions();
-            $role = $roleManager->role;
-            $roleStr = $datas['roleStr'] ?? '';
-            $roleStr .= $role['code'] . '/' . $role['name'] . '|';
             $datas['roles'][] = $roleManager['role_code'];
-            $datas['roleStr'] = $roleStr;
-            $datas['roleDetails'][$roleManager['role_code']] = $role;
-            $datas['permissions'][$roleManager['role_code']] = $permissionRepository->getTreeInfos($permissions);
-            $datas['basePermission'][$roleManager['role_code']] = $permissions;
+            $datas['roleDetails'][$roleManager['role_code']] = $roleManager->role;
+            $datas['permissions'][$roleManager['role_code']] = $permissionRepository->getTreeInfos($roleManager->role->getFormatPermissions());
             //echo $roleManager->role['name'] . '==' . count($datas['permissions'][$roleManager['role_code']]) . '---------';
 
         }
         return $datas;
     }
 
-    /*public function getPointPermission($routeCode)//app, $path, $method)
+    public function getPointPermission($routeCode)//app, $path, $method)
     {
-        //echo $routeCode;exit();
         return true;
-    }*/
+    }
 
     public function checkPermissionTo($permission, $rolePermissions)
     {
         //return false;
+        return true;
+    }
+
+    public function writeManagerLog($data, $dataPre = null)
+    {
+        $manager = request()->get('manager');
+        if (empty($manager)) {
+            return true;
+        }
+        $permission = request()->get('currentPermission');
+        $rolePermissions = request()->get('rolePermissions');
+        $infos = [
+            'manager_id' => $manager['id'],
+            'manager_name' => $manager['nickname'],
+            'role' => $rolePermissions['roleStr'],
+            'menu_code' => $permission['code'],
+            'menu_name' => $permission['name'],
+            'data' => json_encode($data),
+            'data_pre' => !empty($dataPre) ? json_encode($dataPre) : '',
+            'ip' => $this->resource->getIp(),
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+        //print_r($infos);exit();
+
+        $managerlogModel = $this->getModelObj('managerlog')->create($infos);
+
         return true;
     }
 }

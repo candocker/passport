@@ -9,9 +9,9 @@ class ManagerRepository extends AbstractRepository
     protected function _statusKeyDatas()
     {
         return [
-            0 => '未激活',
-            1 => '使用中',
-            99 => '锁定',
+            '0' => '未激活',
+            '1' => '使用中',
+            '99' => '锁定',
         ];
     }
 
@@ -30,7 +30,15 @@ class ManagerRepository extends AbstractRepository
         return [
             'nickname' => ['type' => 'input', 'require' => ['add']],
             'user_id' => ['type' => 'selectSearch', 'require' => ['add'], 'searchResource' => 'user'],
+            'role' => ['type' => 'select', 'infos' => $this->getPointKeyValues('role'), 'multiple' => 1],
             'status' => ['type' => 'radio', 'infos' => $this->getKeyValues('status')],
+        ];
+    }
+
+    public function getShowFields()
+    {
+        return [
+            'role' => ['valueType' => 'extinfo', 'extType' => 'role'],
         ];
     }
 
