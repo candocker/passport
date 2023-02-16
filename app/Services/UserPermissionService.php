@@ -52,10 +52,9 @@ class UserPermissionService extends AbstractService
             return $this->resource->throwException(400, '用户名或者密码错误');
         }
 
-        $userName = $user['name'] ?? $user['userName'];
         $enable = $user->checkEnable();
         if (!$enable) {
-            return $this->resource->throwExceoption(405, "用户{$userName}已禁用");
+            return $this->resource->throwExceoption(405, "用户{$name}已禁用");
         }
         $user->recordSignin(['last_ip' => $this->resource->getIp()]);
 

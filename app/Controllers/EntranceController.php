@@ -35,9 +35,9 @@ class EntranceController extends AbstractController
         return $this->_token($request, ['type' => 'mobile']);
     }
 
-    /**
-     * 获取token
-     */
+	/**
+ 	 * 获取token
+	 */
     public function managerToken()
     {
         $request = $this->getPointRequest('managerToken');
@@ -62,9 +62,9 @@ class EntranceController extends AbstractController
         return $this->success($datas);
     }
 
-    /**
-     * 获取token
-     */
+	/**
+ 	 * 获取token
+	 */
     public function token()
     {
         $request = $this->getPointRequest('token');

@@ -97,7 +97,7 @@ class ResourceRepository extends AbstractRepository
         foreach ($infos as $info) {
             $code = $info['code'];
             $codeCamel = $this->resource->strOperation($code, 'camel');
-            $app = $info['app'];
+            $app = $info['app'] == 'double6' ? 'app' : $info['app'];
             foreach (['controller', 'model', 'request', 'service', 'repository', 'resource', 'collection'] as $elem) {
                 if (empty($info[$elem])) {
                     continue;

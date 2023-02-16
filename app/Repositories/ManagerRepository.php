@@ -29,7 +29,7 @@ class ManagerRepository extends AbstractRepository
     {
         return [
             'nickname' => ['type' => 'input', 'require' => ['add']],
-            'user_id' => ['type' => 'selectSearch', 'require' => ['add'], 'searchResource' => 'user'],
+            'user_id' => ['type' => 'selectSearch', 'require' => ['add'], 'searchResource' => 'study-record', 'searchApp' => 'double6'],
             'role' => ['type' => 'select', 'infos' => $this->getPointKeyValues('role'), 'multiple' => 1],
             'status' => ['type' => 'radio', 'infos' => $this->getKeyValues('status')],
         ];

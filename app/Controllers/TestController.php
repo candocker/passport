@@ -20,6 +20,23 @@ class TestController extends AbstractController
         $this->$method($request);
     }
 
+    protected function _testField()
+    {
+        $models = $this->getModelObj('resource')->where(['app' => 'double6'])->get();
+        $str = '';
+        foreach ($models as $model) {
+            $where['TABLE_NAME'] = 'el_sp_' . str_replace('-', '_', $model['code']);
+            $r = \DB::connection('double6')->table(\DB::raw('information_schema.COLUMNS'))->where($where)->get();
+            $str .= $model['code'] . "\n";
+            foreach ($r as $c) {
+            $str .= "'{$c->COLUMN_NAME}', ";
+            }
+            $str .= "\n";
+        }
+        echo $str;
+        exit();
+    }
+
     public function _testCheckResource($request)
     {
         $config = $this->config->get('local_params.resourcePath');
@@ -35,7 +52,7 @@ class TestController extends AbstractController
         \DB::update("REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`, `created_at`) SELECT 'admin', `code`, `created_at` FROM `wp_auth_permission` WHERE 1 ;");
         $this->getRepositoryObj('resource')->cacheResourceDatas();
         $this->getRepositoryObj('permission')->cacheRouteDatas();
-        //$params = $request->all();
+        $params = $request->all();
         $resources = $this->resource->getBaseCache('resource');
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
         $config = $this->config->get('local_params.resourcePath');

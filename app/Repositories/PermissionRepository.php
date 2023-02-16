@@ -91,7 +91,7 @@ class PermissionRepository extends AbstractRepository
         return [
             'app' => ['type' => 'select', 'multiple' => 1],
             'parent_code' => ['type' => 'cascader', 'props' => ['value' => 'code', 'label' => 'name', 'children' => 'subInfos', 'checkStrictly' => true, 'multiple' => true], 'infos' => $this->getPointTreeDatas(null, 2, 'list')],
-            'resource_code' => ['type' => 'selectSearch', 'searchResource' => 'resource', 'multiple' => 1],
+            'resource_code' => ['type' => 'selectSearch', 'searchApp' => 'passport', 'searchResource' => 'resource', 'multiple' => 1],
         ];
     }
 

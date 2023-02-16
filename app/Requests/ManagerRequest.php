@@ -10,7 +10,7 @@ class ManagerRequest extends AbstractRequest
     {
         return [
             'nickname' => ['bail', 'string', 'required', 'unique:auth_manager,nickname', 'between:3,20'],
-            'user_id' => ['bail', 'required', 'unique:auth_manager,user_id', 'exists:user,id'],
+            'user_id' => ['bail', 'required', 'unique:auth_manager,user_id', 'exists:double6.study_record,uid'],
             'status' => [$this->_getKeyValues('status')],
         ];
     }
