@@ -43,16 +43,21 @@ class TagInfoRepository extends AbstractRepository
             99 => '锁定',
         ];
     }
+	/*public function _statusKeyDatas()
+	{
+		return [
+			'nav' => '导航标签',
+			'hot' => '热门标签',
+			'comment' => '推荐标签',
+		];
+	}
 
-    public function getDatas($params)
-    {
-        $infos = $this->findWhere($params);
-        $datas = [];
-        foreach ($infos as $info) {
-            $data = $info->toArray();
-            $data['name'] = $info->tag->name;
-            $datas[] = $data;
-        }
-        return $datas;
-    }
+	public function _infoTypeKeyDatas()
+	{
+		return [
+			'book' => '书籍',
+			'chapter' => '段落内容',
+			'author' => '作者',
+		];
+    }*/
 }

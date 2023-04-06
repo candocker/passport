@@ -9,10 +9,11 @@ class TagRepository extends AbstractRepository
     protected function _sceneFields()
     {
         return [
-            'list' => ['code', 'sort', 'name', 'description', 'created_at', 'status'],
-            'listSearch' => ['name', 'code', 'status', 'created_at'],
-            'add' => ['code', 'sort', 'name', 'description', 'status'],
-            'update' => ['code', 'sort', 'name', 'description', 'status'],
+            'list' => ['code', 'sort', 'name', 'brief', 'created_at'],
+            'listSearch' => ['name', 'code', 'created_at'],
+            'keyvalueExtSearch' => ['keyword'],
+            'add' => ['code', 'sort', 'name', 'brief'],
+            'update' => ['code', 'sort', 'name', 'brief'],
         ];
     }
 
@@ -37,19 +38,13 @@ class TagRepository extends AbstractRepository
         ];
     }
 
-    protected function _statusKeyDatas()
-    {
-        return [
-            0 => '未激活',
-            1 => '使用中',
-            99 => '锁定',
-        ];
-    }
-
     protected function _sortKeyDatas()
     {
         return [
             '' => '未分类',
+            'comment' => '推荐',
+            'hot' => '热门',
+            'nav' => '导航',
             'topic' => '话题',
         ];
     }

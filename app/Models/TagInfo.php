@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace ModulePassport\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class TagInfo extends AbstractModel
 {
+    use SoftDeletes;
     protected $table = 'tag_info';
     public $timestamps = false;
 
@@ -28,12 +31,32 @@ class TagInfo extends AbstractModel
             $data = array_merge($baseData, [
                 'tag_code' => $tagCode,
             ]);
-            $exist = $this->where($data)->first();
+            $exist = $this->where($data)->withTrashed()->first();
             if ($exist) {
+                $exist->restore();
                 $datas[] = $exist;
                 continue;
             }
             $datas[] = $this->create($data);
+        }
+        return $datas;
+    }
+
+    public function getTargetInfo()
+    {
+        $model = $this->getModelObj("{$this->app}-{$this->info_table}");
+        $info = $model->find($this->info_id);
+        return $info;
+    }
+
+    public function getDatas($params)
+    {
+        $infos = $this->where($params)->get();
+        $datas = [];
+        foreach ($infos as $info) {
+            $data = $info->toArray();
+            $data['name'] = $info->tag->name;
+            $datas[] = $data;
         }
         return $datas;
     }
