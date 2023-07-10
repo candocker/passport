@@ -27,7 +27,7 @@ class PermissionRequest extends AbstractRequest
     protected function _updateRule()
     {
         return [
-            'parent_code' => ['bail', 'filled', 'exists:auth_permission,code'],
+            'parent_code' => ['bail', 'nullable', 'exists:auth_permission,code'],
         ];
     }
 
