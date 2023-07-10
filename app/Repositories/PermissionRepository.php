@@ -77,6 +77,7 @@ class PermissionRepository extends AbstractRepository
             3 => '左侧操作',
             4 => '顶部操作',
             5 => '记录操作',
+            90 => '指定路由',
             99 => '指定位置操作',
         ];
     }

@@ -20,6 +20,18 @@ class TestController extends AbstractController
         $this->$method($request);
     }
 
+    protected function _testUpdatePermission()
+    {
+        $service = $this->getServiceObj('userPermission');
+        $service->updatePermission();
+    }
+
+    protected function _testUpdateResource()
+    {
+        $service = $this->getServiceObj('userPermission');
+        $service->updateResource();
+    }
+
     protected function _testField()
     {
         $models = $this->getModelObj('resource')->where(['app' => 'double6'])->get();
