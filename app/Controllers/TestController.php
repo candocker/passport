@@ -20,6 +20,18 @@ class TestController extends AbstractController
         $this->$method($request);
     }
 
+    protected function _testUpdatePermission()
+    {
+        $service = $this->getServiceObj('userPermission');
+        $service->updatePermission();
+    }
+
+    protected function _testUpdateResource()
+    {
+        $service = $this->getServiceObj('userPermission');
+        $service->updateResource();
+    }
+
     public function _testCheckResource($request)
     {
         $config = $this->config->get('local_params.resourcePath');
