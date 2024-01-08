@@ -18,4 +18,21 @@ class UserCollection extends AbstractCollection
             ],
         ];
     }*/
+
+    protected function _keyvalueNameArray()
+    {
+        return [
+            'key' => 'name',
+            'name' => 'name',
+            'extField' => 'extField',
+            'extField2' => 'extField2',
+            'data' => $this->collection->toArray(),
+        ];
+        $result = [];
+        foreach ($datas as $data) {
+            $tmp = array_values($data);
+            $result[$tmp[0]] = $tmp[1];
+        }
+        return ['data' => $result];
+    }
 }

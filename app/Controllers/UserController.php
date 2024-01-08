@@ -17,4 +17,13 @@ class UserController extends AbstractController
         $repository = $this->getRepositoryObj();
 		return ['code' => 200, 'message' => 'success', 'data' => $repository->getUserData($user)];
 	}
+
+    public function changePassword()
+    {
+        $repository = $this->getRepositoryObj();
+        $request = $this->getPointRequest('changePassword', $repository);
+        $service = $this->getServiceObj('userPermission');
+        $service->changePassword($request->all());
+        return $this->success();
+    }
 }

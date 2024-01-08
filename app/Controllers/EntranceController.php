@@ -114,7 +114,7 @@ class EntranceController extends AbstractController
     public function logout()
     {
         auth('api')->logout();
-        return responseJsonHttp(200, '您已成功退出登录');
+        return responseJson(200, '您已成功退出登录');
     }
 
     /**
