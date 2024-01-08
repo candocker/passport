@@ -10,6 +10,8 @@ class TestController extends AbstractController
 {
     public function test()
     {
+        //$permissions = $this->resource->getBaseCache('permission');
+        //print_r($permissions);exit();
         $request = $this->request;
         $inTest = config('app.inTest');
         if (empty($inTest)) {
@@ -20,39 +22,52 @@ class TestController extends AbstractController
         $this->$method($request);
     }
 
-    protected function _testUpdatePermission()
+    protected function _testDeleteResource()
     {
-        $service = $this->getServiceObj('userPermission');
-        $service->updatePermission();
+        $app = 'wmsystem';
+        //$rCode = 'order-inventory-detail';
+        //$rCode = 'order-putin-shop';
+        $rCode = 'seed-wall-record';
+        //$rCode = 'order-shop-detail';
+        //$rCode = 'order-shop';
+
+        $resource = $this->getModelObj('resource')->where(['app' => $app, 'code' => $rCode])->first();
+        $pCodeStr = '';
+        $pInfos = $this->getModelObj('permission')->where(['resource_code' => $rCode])->get();
+        foreach ($pInfos as $pInfo) {
+            $pCodeStr .= "{$pInfo['code']}','";
+        }
+        $pCodeStr = rtrim($pCodeStr, "','");
+
+        $sql = "DELETE FROM `wp_auth_resource` WHERE `app` = '{$app}' AND `code` = '{$rCode}';\n";
+        $sql .= "DELETE FROM `wp_auth_role_permission` WHERE `permission_code` IN ('{$pCodeStr}');\n";
+        $sql .= "DELETE FROM `wp_auth_permission` WHERE `code` IN ('{$pCodeStr}');\n";
+
+        $class = ucfirst(Str::camel($rCode));
+        echo $sql;
+        $command = "rm -f app/Controllers/{$class}Controller.php\n";
+        $command .= "rm -f app/Models/{$class}.php\n";
+        $command .= "rm -f app/Repositories/{$class}Repository.php\n";
+        $command .= "rm -f app/Requests/{$class}Request.php\n";
+        $command .= "rm -f app/Resources/{$class}.php\n";
+        $command .= "rm -f app/Resources/{$class}Collection.php\n";
+
+        echo $command;
+
     }
 
     protected function _testUpdateResource()
     {
         $service = $this->getServiceObj('userPermission');
-        $service->updateResource();
-    }
-
-    protected function _testField()
-    {
-        $models = $this->getModelObj('resource')->where(['app' => 'double6'])->get();
-        $str = '';
-        foreach ($models as $model) {
-            $where['TABLE_NAME'] = 'el_sp_' . str_replace('-', '_', $model['code']);
-            $r = \DB::connection('double6')->table(\DB::raw('information_schema.COLUMNS'))->where($where)->get();
-            $str .= $model['code'] . "\n";
-            foreach ($r as $c) {
-            $str .= "'{$c->COLUMN_NAME}', ";
-            }
-            $str .= "\n";
-        }
-        echo $str;
-        exit();
+        $service->updatePermission();
+        //$service->updateResource();
     }
 
     public function _testCheckResource($request)
     {
         $config = $this->config->get('local_params.resourcePath');
         $dataConfig = config('database');
+        print_r($dataConfig);
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
         $command->checkResource($dataConfig['connections'], $config);
         print_r($config);exit();
@@ -60,11 +75,11 @@ class TestController extends AbstractController
 
     public function _testResource($request)
     {
-        \DB::update("TRUNCATE `wp_auth_role_permission`;");
-        \DB::update("REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`, `created_at`) SELECT 'admin', `code`, `created_at` FROM `wp_auth_permission` WHERE 1 ;");
+        //\DB::update("TRUNCATE `wp_auth_role_permission`;");
+        //\DB::update("REPLACE INTO `wp_auth_role_permission`(`role_code`, `permission_code`, `created_at`) SELECT 'superman', `code`, `created_at` FROM `wp_auth_permission` WHERE 1 ;");
         $this->getRepositoryObj('resource')->cacheResourceDatas();
         $this->getRepositoryObj('permission')->cacheRouteDatas();
-        $params = $request->all();
+        //$params = $request->all();
         $resources = $this->resource->getBaseCache('resource');
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
         $config = $this->config->get('local_params.resourcePath');
@@ -76,10 +91,10 @@ class TestController extends AbstractController
 
     protected function _testCache($request)
     {
-        $repository = $this->getRepositoryObj('region');
+        $repository = $this->getRepositoryObj('permission');
         //$repository->setPointCaches('region');
         $datas = $repository->getPointCaches('permission');
-        print_R($datas);
+        print_R($datas);exit();
         $service = $this->getServiceObj('redis');
         $redis = $service->setRedis('common');
 

@@ -73,7 +73,8 @@ class ManagerPermissionService extends AbstractService
     public function getManager($user, $record = true)
     {
         $repository = $this->getRepositoryObj("manager");
-        $manager = $repository->findBy('user_id', $user->id);
+        //$manager = $repository->findBy('user_id', $user->id);
+        $manager = $this->getModelObj('manager')->where(['user_id' => $user['id']])->first();
         if (empty($manager)) {
             return $this->throwException(400, "用户{$user['name']}不是管理员");
         }

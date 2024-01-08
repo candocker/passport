@@ -14,12 +14,12 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract
     use Authenticatable;
     use TraitUser;
 
-    protected $connection = 'double6';
-    protected $table = 'study_record';
-    protected $primaryKey = 'uid';
+    //protected $connection = 'double6';
+    protected $table = 'user';
+    protected $primaryKey = 'id';
     protected $guarded = ['created_at', 'last_login_at', 'updated_at'];
     protected $fillable = [
-        'name', 'email', 'phone', 'password', 'sex', 'real_name', 'register_ip', 'nickname',
+        'name', 'email', 'mobile', 'password', 'sex', 'real_name', 'register_ip', 'nickname',
     ];
 
     protected $hidden = [

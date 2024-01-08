@@ -15,6 +15,41 @@ class Manager extends AbstractModel
     protected $guarded = ['created_at', 'last_login_at', 'updated_at'];
     protected $fillable = ['nickname', 'user_id', 'status', 'signin_num', 'signin_first_at', 'last_at', 'last_ip'];
 
+    public function getBirthdayAttribute()
+    {
+        return $this->user->birthday;
+    }
+
+    public function getMobileAttribute()
+    {
+        return $this->user->mobile;
+    }
+
+    public function getGenderAttribute()
+    {
+        return $this->user->gender;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->user->name;
+    }
+
+    public function getPasswordConfirmationAttribute()
+    {
+        return '';
+    }
+
+    public function getPasswordAttribute()
+    {
+        return '';
+    }
+
+    public function userData()
+    {
+        return $this->getModelObj('user')->find($this->user_id);
+    }
+
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
@@ -54,5 +89,15 @@ class Manager extends AbstractModel
         }
 
         return true;
+    }
+
+    public function createByUser($user)
+    {
+        $data = [
+            'user_id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'status' => 1,
+        ];
+        return $this->create($data);
     }
 }

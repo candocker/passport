@@ -32,7 +32,7 @@ class PermissionRepository extends AbstractRepository
     protected function _sceneFields()
     {
         return [
-            'list' => ['name', 'app', 'code', 'parent_code', 'resource_code', 'orderlist', 'controller', 'route', 'route_path', 'action', 'method', 'display', 'updated_at', 'extparam'],
+            'list' => ['name', 'app', 'code', 'parent_code', 'resource_code', 'orderlist', 'controller', 'route', 'route_path', 'action', 'method', 'display', 'updated_at', 'extparam', 'point_action'],
             //'base' => ['name', 'app', 'code', 'controller', 'route', 'action', 'method'],
             'view' => ['name', 'app', 'code', 'controller', 'route', 'action', 'method'],
             'listSearch' => ['code', 'app', 'resource_code', 'parent_code', 'name', 'updated_at'],
@@ -100,7 +100,7 @@ class PermissionRepository extends AbstractRepository
         return [
             'app' => ['type' => 'select', 'multiple' => 1],
             'parent_code' => ['type' => 'cascader', 'props' => ['value' => 'code', 'label' => 'name', 'children' => 'subInfos', 'checkStrictly' => true, 'multiple' => true], 'infos' => $this->getPointTreeDatas(null, 2, 'list')],
-            'resource_code' => ['type' => 'selectSearch', 'searchApp' => 'passport', 'searchResource' => 'resource', 'multiple' => 1],
+            'resource_code' => ['type' => 'selectSearch', 'searchResource' => 'resource', 'multiple' => 1],
         ];
     }
 

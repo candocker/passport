@@ -52,13 +52,26 @@ class UserPermissionService extends AbstractService
             return $this->resource->throwException(400, '用户名或者密码错误');
         }
 
+        $userName = $user['name'] ?? $user['userName'];
         $enable = $user->checkEnable();
         if (!$enable) {
-            return $this->resource->throwExceoption(405, "用户{$name}已禁用");
+            return $this->resource->throwException(405, "用户{$userName}已禁用");
         }
         $user->recordSignin(['last_ip' => $this->resource->getIp()]);
 
         return $user;
+    }
+
+    public function changePassword($inputs)
+    {
+        $user = request()->get('current_user');
+        if (!$this->hash->check($inputs['password_old'], $user->password)) {
+            return $this->resource->throwException(400, "用户原密码错误");
+        }
+        $user->password = $this->hash->make($inputs['password']);
+        $user->save();
+        auth('api')->logout();
+        return true;
     }
 
     public function addUserByInput($inputs)
@@ -73,11 +86,11 @@ class UserPermissionService extends AbstractService
     public function getManager($user, $record = true)
     {
         $repository = $this->getRepositoryObj("manager");
-        $manager = $repository->findBy('user_id', $user['id']);
+        $manager = $this->getModelObj('manager')->where(['user_id' => $user['id']])->first();
         $userName = $user['name'] ?? $user['userName'];
 
         if (empty($manager)) {
-            return $this->resource->throwException(400, "用户{$userName}不是管理员");
+            return $this->resource->throwException(400, "用户{$userName}不是管理员1-{$user['id']}");
         }
 
         $enable = $manager->checkEnable();
@@ -121,6 +134,43 @@ class UserPermissionService extends AbstractService
         return true;
     }
 
+    public function getUserData($data, $info = null)
+    {
+        if (!empty($info)) {
+            $user = $info->userData();
+            if (empty($user)) {
+                $this->resource->throwException(400, '账号有误');
+            }
+
+            $this->updateUserData($user, $data);
+            return $user;
+        }
+        $name = $data['name'];
+        $user = $this->getModelObj('user')->where('name', $name)->first();
+        if (empty($user)) {
+            if (empty($data['password'])) {
+                $this->resource->throwException(400, '需要建建账号，请提供密码');
+            }
+            $userData = ['name' => $name];
+            $user = $this->getModelObj('user')->create($userData);
+        }
+        $this->updateUserData($user, $data);
+        return $user;
+    }
+
+    protected function updateUserData($user, $data)
+    {
+        if (empty($user->nickname) && !empty($data['nickname'])) {
+            $user->nickname = $data['nickname'];
+        }
+        $user->mobile = $data['mobile'] ?? $user->mobile;
+        $user->gender = $data['gender'] ?? $user->gender;
+        $user->birthday = $data['birthday'] ?? $user->birthday;
+        $user->password = isset($data['password']) && !empty($data['password']) ? $this->hash->make($data['password']) : $user->password;
+        $user->save();
+        return true;
+    }
+
     public function updateResource()
     {
         $infos = $this->getModelObj('resource')->get();
@@ -128,7 +178,7 @@ class UserPermissionService extends AbstractService
         foreach ($infos as $info) {
             $datas[$info['code']] = $info->toArray();
         }
-        $tInfos = \DB::select("SELECT * FROM `liuliubak`.`wp_auth_resource` ");
+        $tInfos = \DB::connection('wmsdev')->select("SELECT * FROM `wp_auth_resource` ");
         foreach ($tInfos as $tInfo) {
             $tDatas[$tInfo->code] = (array) $tInfo;
         }
@@ -179,13 +229,13 @@ class UserPermissionService extends AbstractService
         foreach ($infos as $info) {
             $datas[$info['code']] = $info->toArray();
         }
-        $tInfos = \DB::select("SELECT * FROM `liuliubak`.`wp_auth_permission` ");
+        $tInfos = \DB::connection('wmsdev')->select("SELECT * FROM `wp_auth_permission` ");
         foreach ($tInfos as $tInfo) {
             $tDatas[$tInfo->code] = (array) $tInfo;
         }
 
         $dCodes = '';
-        $dIgnores = ['double6_word-point_delete'];
+        $dIgnores = [];
         foreach ($tDatas as $tCode => $tData) {
             if (!in_array($tCode, array_keys($datas)) && !in_array($tCode, $dIgnores)) {
                 //echo 'nnnn-' . $tCode;
@@ -196,8 +246,10 @@ class UserPermissionService extends AbstractService
         $dCodes = trim($dCodes, ',');
         $dSql = "DELETE FROM `wp_auth_role_permission` WHERE `permission_code` IN ({$dCodes});\n";
         $dSql .= "DELETE FROM `wp_auth_permission` WHERE `code` IN ({$dCodes});\n";
+        $aSql = "SELECT FROM `wp_auth_permission` WHERE `code` IN ({$dCodes});\n";
         echo $dSql;
-        exit();
+        echo $aSql;
+        //exit();
 
         $aCodes = '';
         $uSql = '';
