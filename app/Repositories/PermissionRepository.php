@@ -32,7 +32,7 @@ class PermissionRepository extends AbstractRepository
     protected function _sceneFields()
     {
         return [
-            'list' => ['name', 'app', 'code', 'parent_code', 'resource_code', 'controller', 'route', 'route_path', 'action', 'method', 'display', 'updated_at'],
+            'list' => ['name', 'app', 'code', 'parent_code', 'resource_code', 'orderlist', 'controller', 'route', 'route_path', 'action', 'method', 'display', 'updated_at', 'extparam'],
             //'base' => ['name', 'app', 'code', 'controller', 'route', 'action', 'method'],
             'view' => ['name', 'app', 'code', 'controller', 'route', 'action', 'method'],
             'listSearch' => ['code', 'app', 'resource_code', 'parent_code', 'name', 'updated_at'],
@@ -41,10 +41,18 @@ class PermissionRepository extends AbstractRepository
         ];
     }
 
+    public function getShowFields()
+    {
+        return [
+            'orderlist' => ['showType' => 'edit'],
+        ];
+    }
+
     public function _getFieldOptions()
     {
         return [
             'name' => ['width' => '200', 'align' => 'left'],
+            'orderlist' => ['width' => '100'],
         ];
     }
 
