@@ -24,16 +24,16 @@ class TestController extends AbstractController
 
     protected function _testDeleteResource()
     {
-        $app = 'wmsystem';
+        $app = 'printsys';
         //$rCode = 'order-inventory-detail';
         //$rCode = 'order-putin-shop';
-        $rCode = 'seed-wall-record';
+        $rCode = 'price-paper';
         //$rCode = 'order-shop-detail';
         //$rCode = 'order-shop';
 
         $resource = $this->getModelObj('resource')->where(['app' => $app, 'code' => $rCode])->first();
         $pCodeStr = '';
-        $pInfos = $this->getModelObj('permission')->where(['resource_code' => $rCode])->get();
+        $pInfos = $this->getModelObj('permission')->where(['app' => $app, 'resource_code' => $rCode])->get();
         foreach ($pInfos as $pInfo) {
             $pCodeStr .= "{$pInfo['code']}','";
         }
@@ -44,13 +44,14 @@ class TestController extends AbstractController
         $sql .= "DELETE FROM `wp_auth_permission` WHERE `code` IN ('{$pCodeStr}');\n";
 
         $class = ucfirst(Str::camel($rCode));
+        $pre = in_array($app, ['printsys', 'wmsystem']) ? 'library' : 'vendor/candocker';
         echo $sql;
-        $command = "rm -f app/Controllers/{$class}Controller.php\n";
-        $command .= "rm -f app/Models/{$class}.php\n";
-        $command .= "rm -f app/Repositories/{$class}Repository.php\n";
-        $command .= "rm -f app/Requests/{$class}Request.php\n";
-        $command .= "rm -f app/Resources/{$class}.php\n";
-        $command .= "rm -f app/Resources/{$class}Collection.php\n";
+        $command = "rm -f {$pre}/{$app}/app/Controllers/{$class}Controller.php\n";
+        $command .= "rm -f {$pre}/{$app}/app/Models/{$class}.php\n";
+        $command .= "rm -f {$pre}/{$app}/app/Repositories/{$class}Repository.php\n";
+        $command .= "rm -f {$pre}/{$app}/app/Requests/{$class}Request.php\n";
+        $command .= "rm -f {$pre}/{$app}/app/Resources/{$class}.php\n";
+        $command .= "rm -f {$pre}/{$app}/app/Resources/{$class}Collection.php\n";
 
         echo $command;
 
@@ -71,6 +72,15 @@ class TestController extends AbstractController
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
         $command->checkResource($dataConfig['connections'], $config);
         print_r($config);exit();
+    }
+
+    public function _testRepositoryStr()
+    {
+        $command = new \Framework\Baseapp\Commands\GenResourceCommand();
+        $connection = $this->request->input('connection', '');
+        $table = $this->request->input('table', '');
+        $str = $command->getPointField($connection, $table, 'string');
+        echo "            'list' => [{$str}],";exit();
     }
 
     public function _testResource($request)
