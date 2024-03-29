@@ -35,6 +35,13 @@ class EntranceController extends AbstractController
         return $this->_token($request, ['type' => 'mobile']);
     }
 
+    public function findPassword()
+    {
+        $request = $this->getPointRequest('findPassword');
+        $checkCode = $this->easysmsService->validateCode($request->all());
+        return $this->_token($request, ['type' => 'mobile', 'addUser' => true]);
+    }
+
     /**
      * 获取token
      */
@@ -89,6 +96,7 @@ class EntranceController extends AbstractController
         $repository = $this->getRepositoryObj('user');
         $datas['user'] = $repository->getUserData($user);
         $datas['access_token'] = $this->_getToken('login', $user);
+        $datas['refresh_token'] = $this->_getToken('refresh');
         $datas['expires_in'] = $this->_getTTL();
         return $this->success($datas);
     }
@@ -113,7 +121,10 @@ class EntranceController extends AbstractController
      */
     public function logout()
     {
-        auth('api')->logout();
+        try {
+            auth('api')->logout();
+        } catch (\Exception $e) {
+        }
         return responseJson(200, '您已成功退出登录');
     }
 

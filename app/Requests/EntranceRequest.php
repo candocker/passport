@@ -45,6 +45,13 @@ class EntranceRequest extends AbstractRequest
                 'name' => ['bail', 'required'],
                 'password' => ['bail', 'required']
             ];
+        case 'findPassword':
+            return [
+                'mobile' => 'required|mobile|exists:user,mobile',
+                'code' => ['bail', 'required'],
+                'type' => ['bail', 'required'],
+                'password' => ['bail', 'filled', 'alpha_dash', 'between:6,20'],
+            ];
         }
     }
 
