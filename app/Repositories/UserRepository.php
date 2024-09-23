@@ -20,6 +20,7 @@ class UserRepository extends AbstractRepository
             //'view' => ['id', 'name', 'mobile', 'email', 'nickname', 'gender', 'birthday', 'spread_code', 'created_at', 'updated_at', 'signin_first', 'signin_num', 'last_ip', 'last_at', 'status', 'avatar'],
             'listSearch' => ['id', 'name', 'mobile', 'nickname', 'created_at', 'status'],
             'keyvalueNameSearch' => ['keyword'],
+            'keyvalueExtSearch' => ['keyword'],
             'add' => ['name', 'nickname', 'mobile', 'password', 'password_confirmation', 'gender', 'birthday', 'status'],
             'update' => ['name', 'nickname', 'mobile', 'password', 'password_confirmation', 'gender', 'birthday', 'status'],
             'changePassword' => ['password_old', 'password', 'password_confirmation'],

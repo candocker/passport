@@ -26,8 +26,26 @@ class ManagerlogRepository extends AbstractRepository
     public function getShowFields()
     {
         return [
-            //'data' => ['showType' => 'hidden'],
+            'data' => ['showType' => ''],
+            'data' => ['valueType' => 'callback', 'method' => 'formatShowData'],
         ];
+    }
+
+    public function formatShowData($model, $field)
+    {
+        if (empty($model->$field)) {
+            return '';
+        }
+        $data = json_decode($model->$field, true);
+        if (empty($data)) {
+            return $model->$field;
+        }
+        $str = '';
+        foreach ($data as $field => $value) {
+            $value = is_array($value) ? implode('-', $value) : $value;
+            $str .= $field . '-' . $value . '<br />';
+        }
+        return $str;
     }
 
     public function getSearchFields()
@@ -48,7 +66,7 @@ class ManagerlogRepository extends AbstractRepository
     public function _getFieldOptions()
     {
         return [
-            'data' => ['hidden' => 1],
+            //'data' => ['hidden' => 1],
             'data_pre' => ['hidden' => 1],
         ];
     }

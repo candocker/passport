@@ -101,24 +101,41 @@ class UserPermissionService extends AbstractService
         return $manager;
     }
 
-    public function getRolePermissions($manager)
+    public function getRolePermissions($manager, $applicationCode)
     {
         $roleManagers = $manager->roleManagers;
+        $applications = $manager->userData()->applicationUsers;
+        //print_r($applications);
         $permissionRepository = $this->getRepositoryObj('permission');
         $datas = [];
+
+        $firstApplication = false;
+        foreach ($applications as $aUser) {
+            $aInfo = $aUser->applicationInfo;
+            $aCode = $aInfo['code'];
+            $datas['applicationDetails'][$aCode] = $aInfo;
+            $datas['applications'][] = $aCode;
+            $firstApplication = $firstApplication ?: $aInfo['module_code'];
+            if ($applicationCode == $aCode) {
+                $applicationCode = $aInfo['module_code'];
+            }
+        }
+        $cApplication = $applicationCode ?: $firstApplication;
         foreach ($roleManagers as $roleManager) {
-            $permissions = $roleManager->role->getFormatPermissions();
+            //$permissions = $roleManager->role->getFormatPermissions();
+            $permissions = $roleManager->role->getApplicationPermissions($cApplication);
+            $pTrees = $permissionRepository->getTreeInfos($permissions);
             $role = $roleManager->role;
             $roleStr = $datas['roleStr'] ?? '';
             $roleStr .= $role['code'] . '/' . $role['name'] . '|';
             $datas['roles'][] = $roleManager['role_code'];
             $datas['roleStr'] = $roleStr;
             $datas['roleDetails'][$roleManager['role_code']] = $role;
-            $datas['permissions'][$roleManager['role_code']] = $permissionRepository->getTreeInfos($permissions);
+            $datas['permissions'][$roleManager['role_code']] = $pTrees;
             $datas['basePermission'][$roleManager['role_code']] = $permissions;
             //echo $roleManager->role['name'] . '==' . count($datas['permissions'][$roleManager['role_code']]) . '---------';
-
         }
+
         return $datas;
     }
 

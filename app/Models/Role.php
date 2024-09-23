@@ -26,7 +26,7 @@ class Role extends AbstractModel
     public function getFormatPermissions($onlyKey = false)
     {
         $rPermissions = RolePermission::query()->with('permission')->where('role_code', $this->code)->get();
-        
+
         $datas = [];
         foreach ($rPermissions as $rPermission){
             $datas[$rPermission['permission_code']] = $rPermission->permission;
@@ -44,6 +44,33 @@ class Role extends AbstractModel
         if ($onlyKey) {
             return array_keys($datas);
         }
+        return $datas;
+    }
+
+    public function getApplicationPermissions($applicationCode)
+    {
+        $rPermissions = RolePermission::query()->with('permission')->where('role_code', $this->code)->get();
+
+        $datas = [];
+        $all = ['brushpen', 'inksystem', 'printsys'];
+        foreach ($rPermissions as $rPermission){
+            $pData = $rPermission->permission;
+            $appCode = $pData['app'];
+            if (in_array($appCode, $all) && $applicationCode != $appCode) {
+                continue;
+            }
+            $datas[$rPermission['permission_code']] = $pData;
+        }
+        if (!empty($datas)) {
+            $tmps = collect($datas);
+            $tmps = $tmps->sortByDesc('orderlist');
+            $result = [];
+            foreach ($tmps as $key => $tmp) {
+                $result[$key] = $tmp;
+            }
+            $datas = $result;
+        }
+
         return $datas;
     }
 }

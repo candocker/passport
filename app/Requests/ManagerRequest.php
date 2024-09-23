@@ -49,7 +49,7 @@ class ManagerRequest extends AbstractRequest
         ];
     }
 
-    public function filterDirtyData($data)
+    public function filterDirtyData($data, $info = null)
     {
         $userPermission = $this->getRepository()->getServiceObj('userPermission');
         if (isset($data['name'])) {

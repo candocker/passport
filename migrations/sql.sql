@@ -15,8 +15,7 @@ INSERT INTO `wp_auth_manager` SELECT * FROM `wp_zinit_auth_manager`;
 
 TRUNCATE TABLE `wp_auth_role_manager`;
 INSERT INTO `wp_auth_role_manager` (`role_code`, `manager_id`, `created_at`) VALUES 
-('superman', '1', NOW()),
-('superman', '2', NOW());
+('superman', '1', NOW());
 
 -------------------旧数据-------------
 INSERT INTO `wp_auth_permission` (`code`, `resource_code`, `parent_code`, `name`, `app`, `controller`, `action`, `orderlist`, `display`, `extparam`) SELECT `code`, `elem_code`, `parent_code`, `name`, `module`, `controller`, `method`, `orderlist`, `display`, `extparam` FROM `bak_passport`.`wp_auth_permission0808` WHERE `module` = 'merchant' ;

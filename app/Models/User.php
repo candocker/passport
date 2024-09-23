@@ -72,4 +72,35 @@ class User extends AbstractModel implements JWTSubject, AuthenticatableContract
             'userData' => ['id' => $this->id, 'name' => $this->name],
         ];
     }
+
+    public function afterSave()
+    {
+        $request = request();
+        $applications = $request->input('application');
+        if (!is_null($applications)) {
+            $model = $this->getModelObj('applicationUser');
+            $model->where('user_id', $this->id)->delete();
+            foreach ($applications as $application) {
+                $model->createApplicationUserRecord($application, $this);
+            }
+        }
+
+        return true;
+    }
+
+    public function applicationUsers()
+    {
+        return $this->hasMany(ApplicationUser::class, 'user_id', 'id');
+    }
+
+    public function getApplication()
+    {
+        $applications = $this->applicationUsers;
+        $result = ['source' => [], 'show' => ''];
+        foreach ($applications as $applicationUser) {
+            $result['source'][] = $applicationUser->applicationInfo['code'];
+            $result['show'] .= ', ' . $applicationUser->applicationInfo['name'];
+        }
+        return $result;
+    }
 }
