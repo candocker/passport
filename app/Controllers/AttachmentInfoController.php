@@ -28,6 +28,7 @@ class AttachmentInfoController extends AbstractController
                 $exist->restore();
                 continue;
             }
+            \Log::debug($data);
             $result = $repository->create($data);
         }
         return $this->success([]);

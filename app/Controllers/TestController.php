@@ -24,12 +24,10 @@ class TestController extends AbstractController
 
     protected function _testDeleteResource()
     {
-        $app = 'printsys';
+        $app = 'infocms';
         //$rCode = 'order-inventory-detail';
         //$rCode = 'order-putin-shop';
-        $rCode = 'price-paper';
-        //$rCode = 'order-shop-detail';
-        //$rCode = 'order-shop';
+        $rCode = 'brand';
 
         $resource = $this->getModelObj('resource')->where(['app' => $app, 'code' => $rCode])->first();
         $pCodeStr = '';
@@ -46,7 +44,14 @@ class TestController extends AbstractController
         $class = ucfirst(Str::camel($rCode));
         $pre = in_array($app, ['printsys', 'wmsystem']) ? 'library' : 'vendor/candocker';
         echo $sql;
-        $command = "rm -f {$pre}/{$app}/app/Controllers/{$class}Controller.php\n";
+        $command = "more {$pre}/{$app}/app/Controllers/{$class}Controller.php\n";
+        $command .= "more {$pre}/{$app}/app/Models/{$class}.php\n";
+        $command .= "more {$pre}/{$app}/app/Resources/{$class}.php\n";
+        $command .= "more {$pre}/{$app}/app/Resources/{$class}Collection.php\n";
+        $command .= "more {$pre}/{$app}/app/Requests/{$class}Request.php\n";
+        $command .= "more {$pre}/{$app}/app/Repositories/{$class}Repository.php\n\n";
+
+        $command .= "rm -f {$pre}/{$app}/app/Controllers/{$class}Controller.php\n";
         $command .= "rm -f {$pre}/{$app}/app/Models/{$class}.php\n";
         $command .= "rm -f {$pre}/{$app}/app/Repositories/{$class}Repository.php\n";
         $command .= "rm -f {$pre}/{$app}/app/Requests/{$class}Request.php\n";
