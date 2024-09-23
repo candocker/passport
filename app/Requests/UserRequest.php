@@ -69,7 +69,7 @@ class UserRequest extends AbstractRequest
         ];
     }
 
-    public function filterDirtyData($data)
+    public function filterDirtyData($data, $info = null)
     {
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = CommonTool::createPassword($data['password']);
