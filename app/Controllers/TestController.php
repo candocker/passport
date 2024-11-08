@@ -22,6 +22,74 @@ class TestController extends AbstractController
         $this->$method($request);
     }
 
+    protected function _testChangeapp()
+    {
+        $appNew = 'knowledge';
+        //$appOld = 'culture';
+        $appOld = 'infocms';
+        $elems = [
+            'navsort' => 'navsort',
+            //'knowledge' => 'knowledge',
+            //'knowledge_detail' => 'knowledge_detail',
+            //'resource_info' => 'resource_info',
+            //'resource_detail' => 'resource_detail',
+            /*'subject' => 'subject',
+            'subject_sort' => 'subject_sort',
+            'group_subject' => 'group_subject',
+            'group' => 'group',*/
+
+            /*'figure_title' => 'figure_title',
+            'dateinfo' => 'dateinfo',
+            'book_figure' => 'book_figure',*/
+            //'dynasty' => 'dynasty',
+
+            //'book_publish' => 'book_listing',
+            /*'book' => 'book',
+            'figure' => 'figure',
+            'series' => 'book_catalog',
+            'series_volume' => 'book_volume',
+            'chapter' => 'chapter',*/
+        ];
+
+        $oPath = '/data/htmlwww/laravel-system/vendor/candocker/' . $appOld . '/app/';
+        $nPath = '/data/htmlwww/laravel-system/vendor/candocker/' . $appNew . '/app/';
+        $command = '';
+        foreach ($elems as $oldResource => $newResource) {
+            $oldClass = $this->resource->strOperation($oldResource, 'studly');
+            $newClass = $this->resource->strOperation($newResource, 'studly');
+
+            $files = [
+                "Controllers/{{CLASS}}Controller.php",
+                "Models/{{CLASS}}.php",
+                "Observers/{{CLASS}}Observer.php",
+                "Requests/{{CLASS}}Request.php",
+                "Resources/{{CLASS}}.php",
+                "Resources/{{CLASS}}Collection.php",
+                "Repositories/{{CLASS}}Repository.php",
+                "Services/{{CLASS}}Service.php",
+            ];
+
+            foreach ($files as $file) {
+                $oldFile = $oPath . str_replace('{{CLASS}}', $oldClass, $file);
+                if (!file_exists($oldFile)) {
+                    //var_dump($oldFile);
+                    continue;
+                }
+                $content = file_get_contents($oldFile);
+                $content = str_replace(ucfirst($appOld), ucfirst($appNew), $content);
+                $content = str_replace($oldClass, $newClass, $content);
+                $content = str_replace($appOld, $appNew, $content);
+                $content = str_replace($oldResource, $newResource, $content);
+                $newFile = $nPath . str_replace('{{CLASS}}', $newClass, $file);
+                var_dump($newFile);
+                file_put_contents($newFile, $content);
+                $command .= "rm -f {$oldFile};\n";
+            }
+        }
+        echo $command;
+        //exit();
+    }
+
     protected function _testDeleteResource()
     {
         $app = 'infocms';
@@ -71,8 +139,10 @@ class TestController extends AbstractController
 
     public function _testCheckResource($request)
     {
-        $config = $this->config->get('local_params.resourcePath');
+        $config = $this->config->get('local_params');
         $dataConfig = config('database');
+        $this->getRepositoryObj('resource')->cacheResourceDatas();
+        $this->getRepositoryObj('permission')->cacheRouteDatas();
         print_r($dataConfig);
         $command = new \Framework\Baseapp\Commands\GenResourceCommand();
         $command->checkResource($dataConfig['connections'], $config);
